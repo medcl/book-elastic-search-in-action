@@ -33,6 +33,7 @@ ul.off-canvas-list li a:hover{background: #335a79;}
 /*.sidebar .side-nav li.side-title span{ display: inline-block; padding: 10px 0; margin-top: 40px; color:#0e83cd; border-top: solid 1px #e3e3e3; font-weight: bold; font-size: 1.2em;}*/
 .sidebar .side-nav li.side-title span{ display: inline-block; padding: 0px 0;  color:#0e83cd; font-weight: bold; font-size: 1.2em;}
 
+.sub_nav{font-size:14px;padding-left:5px;}
 
 .sidebar .side-nav li a{  color: #444;}
 .sidebar .side-nav li a:hover{color: #0e83cd; background:none;}
