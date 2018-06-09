@@ -18,13 +18,20 @@ ul.off-canvas-list li a:hover{background: #335a79;}
 .sidebar {
     padding: 0px 0px; padding-right: 8%;
 }
+
+.sidebar .side-nav {
+    margin-top:40px;
+    border-top: solid 1px #e3e3e3; 
+  }
+
 .sidebar .side-nav li {
     margin: 0;
     padding: 0;
 }
 .sidebar .side-nav a{ font-family: Lato,Helvetica Neue,Helvetica,Arial,sans-serif;}
-.sidebar .side-nav li a{ padding: 4px 4px;}
-.sidebar .side-nav li.side-title span{ display: inline-block; padding: 10px 0; margin-top: 40px; color:#0e83cd; border-top: solid 1px #e3e3e3; font-weight: bold; font-size: 1.2em;}
+.sidebar .side-nav li a{ padding: 2px 2px;}
+/*.sidebar .side-nav li.side-title span{ display: inline-block; padding: 10px 0; margin-top: 40px; color:#0e83cd; border-top: solid 1px #e3e3e3; font-weight: bold; font-size: 1.2em;}*/
+.sidebar .side-nav li.side-title span{ display: inline-block; padding: 0px 0;  color:#0e83cd; font-weight: bold; font-size: 1.2em;}
 
 
 .sidebar .side-nav li a{  color: #444;}

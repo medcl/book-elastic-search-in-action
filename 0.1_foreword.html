@@ -29,7 +29,8 @@
 <nav class="top-bar docs-bar hide-for-small" data-topbar>
 
 <div id="header">
-    <h1><a href="index.html">Elastic 搜索开发实战</a></h1>
+    <h1><a href="index.html">Elastic 搜索开发实战</a><div style="float: right;"><!-- Place this tag where you want the button to render. -->
+<a class="github-button" href="https://github.com/medcl/book-elastic-search-in-action" data-size="large" data-show-count="true" aria-label="Star medcl/book-elastic-search-in-action on GitHub">Star</a></div></h1>
 </div>
 
 </nav>
@@ -42,6 +43,9 @@
 <aside class="left-off-canvas-menu">
       <ul class="off-canvas-list">
       <li><a href="index.html">Home</a></li>
+
+		 
+
       
         <li class="divider"></li>
         <li><label>前言</label></li>
@@ -52,6 +56,12 @@
 
       
       </ul>
+
+ <div>
+ 	<br/><br/>
+ 	&nbsp;&nbsp;<!-- Place this tag where you want the button to render. -->
+<a class="github-button" href="https://github.com/medcl/book-elastic-search-in-action" data-size="large" data-show-count="true" aria-label="Star medcl/book-elastic-search-in-action on GitHub">Star</a></div>
+
     </aside>
 
 <a class="exit-off-canvas" href="#"></a>
@@ -64,9 +74,10 @@
                 <div class="sidebar">
                 <nav>
                   <ul id="side-nav" class="side-nav">
+					 
 
                     
-                      <li class="side-title"><span>前言</span></li>
+                      <li class="side-title"><span><a title="前言" href="1.0_preface.html">前言</a></span></li>
                         
                           <li><a title="本书导航" href="1.0_nav.html">本书导航</a></li>
                         
@@ -110,6 +121,8 @@
   <div class="large-6 columns">
 	<div class="text-left" style="padding:15px 0px;">
 		
+	        <a href="index.html"  title="Previous Post: 封面">&laquo; 封面</a>
+	    
 	</div>
   </div>
   <div class="large-6 columns">
@@ -124,6 +137,8 @@
 
 <div class="row">
 <div style="padding:0px 0.93em;" class="share-comments">
+
+
 <div id="disqus_thread"></div>
 <script>
 
@@ -145,6 +160,7 @@ s.setAttribute('data-timestamp', +new Date());
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
                             
+
 </div>
 </div>
 <script type="text/javascript">
@@ -164,7 +180,7 @@ s.setAttribute('data-timestamp', +new Date());
   <div class="row">
   <hr />
   <div class="small-9 columns">
-  <p class="copyright">Copyright &copy; 2018 <a target="_blank" href="http://medcl.com">Medcl</a>. 未经许可,谢绝一切形式的转载.</p>
+  <p class="copyright">Copyright &copy; 2018 <a target="_blank" href="http://medcl.com">Medcl</a>. 未经许可,谢绝转载.</p>
   </div>
   <div class="small-3 columns">
   <p class="copyright text-right"><a href="#header">TOP</a></p>
@@ -180,6 +196,21 @@ s.setAttribute('data-timestamp', +new Date());
     
     <script src="asset/js/foundation.min.js"></script>
     <script src="asset/js/foundation/foundation.offcanvas.js"></script>
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script id="dsq-count-scr" src="//elastic-sou-suo-kai-fa-shi-zhan.disqus.com/count.js" async></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-120597990-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-120597990-1');
+    </script>
+
+
+
     <script>
       $(document).foundation();
 
@@ -187,17 +218,6 @@ s.setAttribute('data-timestamp', +new Date());
     </script>
     <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
-<script id="dsq-count-scr" src="//elastic-sou-suo-kai-fa-shi-zhan.disqus.com/count.js" async></script>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-120597990-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-120597990-1');
-</script>
-
 
   </body>
 </html>
