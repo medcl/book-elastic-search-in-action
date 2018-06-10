@@ -181,7 +181,8 @@
  <div class="markdown-body">
 <h1>常用 API 介绍</h1>
 
-<p>前面介绍了 Elasticsearch 和 Kibana 的安装，这一节主要来介绍一下在 Kibana 里面的 DevTools 下，具体如何来进行最基本的 Elasticsearch 操作。</p>
+<p>前面介绍了 Elasticsearch 和 Kibana 的安装，这一节主要来介绍一下在 Kibana 里面的 DevTools 下，具体如何来进行最基本的 Elasticsearch 操作。Elasticsearch 里面所有的 API 的输入输出都是 JSON 数据结构。有关 JSON 的更完整的介绍可访问：<br/>
+<a href="https://www.json.org/json-zh.html">https://www.json.org/json-zh.html</a></p>
 
 <h2 id="toc_0">增删改查</h2>
 
@@ -234,6 +235,8 @@
 }
 </code></pre>
 
+<p>返回结果里面的 <code>found</code> 说明找到了该文档，<code>_source</code> 即我们 POST 进去的原始文档。</p>
+
 <p>如果要修改这个文档，有两种方式，一种是完全替换，使用相同的路径即可，我们修改 age 为 35，如下：</p>
 
 <pre><code class="language-js">PUT twitter/doc/1
@@ -271,6 +274,8 @@
 }
 </code></pre>
 
+<p>最外层的 <code>doc</code> 是固定的结构，我们只需要准备要更新的字段放在里面就行。</p>
+
 <p>最后我们再来看看删除，只需要把取回文档操作的 GET 换成 DELETE 就行了，如下：</p>
 
 <pre><code class="language-js">DELETE twitter/doc/1
@@ -294,6 +299,8 @@
 }
 </code></pre>
 
+<p>很好，<code>result</code> 显示删除成功。</p>
+
 <h2 id="toc_1">搜索的使用</h2>
 
 <p>我们创建两个索引文档，ID 分别是 1 和 2，如下：</p>
@@ -311,7 +318,7 @@ POST twitter/doc/2
 }
 </code></pre>
 
-<p>现在我们想通过名称来进行搜索，可以使用 _search 接口，然后指定条件 <code>q</code> 来传递查询关键字，如下：</p>
+<p>现在我们想通过名称来进行搜索，可以使用 <code>_search</code> 接口，然后指定条件 <code>q</code> 来传递查询关键字，如下：</p>
 
 <pre><code class="language-js">GET twitter/_search?q=jack
 </code></pre>
@@ -346,7 +353,9 @@ POST twitter/doc/2
 }
 </code></pre>
 
-<p>或者通过年龄来进行检索，如下：</p>
+<p><code>hits</code> 就是我们搜索返回的结果，<code>total</code> 是搜索命中的结果总数，下面的 <code>hits</code> 是本次返回的部分搜索结果，是一个数组结构，里面是具体的索引文档。</p>
+
+<p>我们再看看如何通过年龄来进行检索，如下：</p>
 
 <pre><code class="language-js">GET twitter/_search?q=35
 </code></pre>
@@ -381,12 +390,12 @@ POST twitter/doc/2
 }
 </code></pre>
 
-<p>另外，我们还能限定查询的字段，如下：</p>
+<p>另外，我们还能限定查询的字段，如只对年龄字段进行查询，如下：</p>
 
 <pre><code class="language-js">GET twitter/_search?q=age:35
 </code></pre>
 
-<p>除此以外，还能使用 QueryDSL 来写查询表达式，即将表达式以 JSON 的方式来通过请求的 Body 来传递，而不是走 URL 网址参数，如下：</p>
+<p>除此以外，还能使用 QueryDSL 来写查询表达式，即将查询表达式以 JSON 的方式来通过请求体（request body）来传递，而不是走 URL 网址参数，如下：</p>
 
 <pre><code class="language-js">GET twitter/_search
 {
@@ -398,7 +407,11 @@ POST twitter/doc/2
 }
 </code></pre>
 
+<p>搜索结果应该和前面 url 传参效果一致，读者可以自行尝试一下。</p>
+
 <h2 id="toc_2">聚合的使用</h2>
+
+<p>聚合是 Elasticsearch 里面用来对搜索结果的数据进行统计和聚合操作的过程，通过聚合，我们可以对搜索结果做到按各个维度的统计，结合丰富的前端展现，从而实现良好的搜索体验。</p>
 
 <p>我们再创建两个索引文档，如下：</p>
 
@@ -414,7 +427,7 @@ POST twitter/doc/4
 }
 </code></pre>
 
-<p>现在我们想统计一下，年龄的分布情况，可以使用如下的查询条件：</p>
+<p>现在我们想统计一下，年龄的分布情况，可以使用如下的查询条件，最外层的 <code>size</code> 为 <code>0</code> 这样可以不返回搜索命中的文档，只返回聚合的统计结果，<code>aggs</code> 就是我们描述聚合查询语句根节点，我们使用 <code>terms</code> 聚合类型来对 <code>age</code> 字段的值进行统计，并且只返回前 <code>10</code> 个统计值，然后这些统计结果我们命名为 <code>age_stats</code>，如下图：</p>
 
 <pre><code class="language-js">GET twitter/_search
 {
@@ -469,27 +482,78 @@ POST twitter/doc/4
 }
 </code></pre>
 
+<p>可以看到查询返回的 JSON 里面包含了表示聚合结果的 <code>aggregations</code> 节点，下面有我们的统计结果 <code>age_stats</code>，下面 <code>buckets</code> 表示聚合的具体值 <code>key</code> 和统计数据 <code>doc_count</code>，也就是各个年龄分别有多少个文档，出现了多少次。</p>
+
 <h2 id="toc_3">索引的管理</h2>
 
-<p>查看索引列表:</p>
+<p>Elasticsearch 还有很多 API 可以用来对索引进行管理，比如我们还可以通过 <code>_cat</code> API 来查看索引列表:</p>
 
-<pre><code class="language-js">GET _cat/indices
+<pre><code class="language-js">GET _cat/indices?v
 </code></pre>
 
 <p>返回：</p>
 
-<pre><code class="language-js">yellow open twitter       dmpz6x9QRYCaA9pw9ScO2w 5 1     4 0 14.5kb 14.5kb
-green  open .kibana       5CatbzsyQQOZLu1SYe7NAg 1 0     2 1  9.7kb  9.7kb
+<pre><code class="language-js">health status index   uuid                   pri rep docs.count docs.deleted store.size pri.store.size
+green  open   .kibana 3UiUi8MZQDeF3p97eRWyFw   1   0          2            1      9.7kb          9.7kb
+yellow open   index   VpNv75DzQESBfX8DcLLcww   5   1          1            0      4.3kb          4.3kb
 </code></pre>
 
-<p>删除索引：</p>
+<p>返回的结果不是 JSON，而是精简的表格类型，第一行是字段名，后面行是具体的数据，可以看到索引的列表、各索引状态、文档数和索引大小等参数，各字段分别说明如下：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>health</td>
+<td> 索引健康状态，<code>green</code> 表示健康；<code>yellow</code> 表示数据完整，但是缺少副本；<code>red</code> 则表示有数据损坏。</td>
+</tr>
+<tr>
+<td>status</td>
+<td> 索引工作状态，<code>open</code> 表示索引打开中，可以被使用；<code>close</code> 表示索引被关闭，不能使用。</td>
+</tr>
+<tr>
+<td>index</td>
+<td> 索引名称。</td>
+</tr>
+<tr>
+<td>uuid</td>
+<td> 索引的唯一 ID 标识。</td>
+</tr>
+<tr>
+<td>pri</td>
+<td> 索引的主分片个数。</td>
+</tr>
+<tr>
+<td>rep</td>
+<td> 索引的副本分片个数。</td>
+</tr>
+<tr>
+<td>docs.count</td>
+<td> 索引内的文档个数。</td>
+</tr>
+<tr>
+<td>docs.deleted</td>
+<td> 索引内已经删除的文档个数。</td>
+</tr>
+</tbody>
+</table>
+
+<p>如果要删除索引，可以执行下面的动作来清理整个索引，<code>twitter</code> 就是其中要删除的索引名：</p>
 
 <pre><code class="language-js">DELETE twitter
 </code></pre>
 
+<p>集群管理的接口很多，我们这里不展开，我们只需要能够知道查看索引是否存在、索引有多少文档，索引是否正常和能够删除索引，我们就可以继续后面的实战了。</p>
+
 <h2 id="toc_4">集群的监控</h2>
 
-<p>查看集群的监控状况：</p>
+<p>除此之外，我们还可以查看集群的健康状况：</p>
 
 <pre><code class="language-js">GET _cluster/health
 </code></pre>
@@ -514,6 +578,8 @@ green  open .kibana       5CatbzsyQQOZLu1SYe7NAg 1 0     2 1  9.7kb  9.7kb
   &quot;active_shards_percent_as_number&quot;: 51.85185185185185
 }
 </code></pre>
+
+<p>这里我们只需要关注 <code>status</code> 字段，当值为 <code>green</code> 或者 <code>yellow</code> 时，我们就可以正常使用该 Elasticsearch 服务。</p>
 
 
 </div>
