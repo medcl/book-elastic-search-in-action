@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  思维导图 - Elastic 搜索开发实战
+  问题列表 - Elastic 搜索开发实战
   
   </title>
  <meta name="description" content="Elastic 搜索开发实战，图书">
@@ -216,15 +216,24 @@
             <div class="large-9 medium-9 columns">
 
  <div class="markdown-body">
-<h1>思维导图</h1>
+<h1>问题列表</h1>
 
-<p>为了帮助大家快速对本书的内容有一个全局的感性认识，同时也帮助我整理全书脉络，我在这里画了一个思维导图，本书相关的目录结构和相关的知识点也都放到了这个思维导图里面：</p>
+<p>我们对上节反映现有系统的各种围绕搜索的问题，整理成以下的问题列表：</p>
 
-<p><img src="media/15285368486678/mindmap.png" alt="Elastic 搜索开发实战"/></p>
+<ul>
+<li>查不到</li>
+<li>查不全</li>
+<li>查不准</li>
+<li>不支持同义词</li>
+<li>不支持简繁体</li>
+<li>不支持拼音</li>
+<li>不支持 PPT 的搜索</li>
+<li>不支持自定义排序，按时间，按相关度</li>
+<li>不支持结果过滤，按分类、按标签、按时间范围等</li>
+<li>搜索结果展示待加强，UI 设计</li>
+</ul>
 
-<blockquote>
-<p>本图后续可能会进行更新。</p>
-</blockquote>
+<p>以上是现有系统的问题，其实如果要做成更加完善的搜索功能，还需要考虑更多的细节，不过我们分步走，先解决基本诉求，再添砖加瓦。</p>
 
 
 </div>
@@ -236,16 +245,13 @@
   <div style="width:50%;float:left;padding-left: 15px;">
 	<div class="text-left" style="padding:15px 0px;">
 		
-	        <a href="1.2_book_strcture.html"  title="Previous Post: 本书结构">&laquo; 本书结构</a>
+	        <a href="3.1_task_intro.html"  title="Previous Post: 任务介绍">&laquo; 任务介绍</a>
 	    
 	</div>
   </div>
   <div style="width:50%;float:right;padding-right: 15px;">
 	<div class="text-right" style="padding:15px 0px;">
 		
-	        <a href="1.4_soft_version.html" 
-	        title="Next Post: 软件版本">软件版本 &raquo;</a>
-	    
 	</div>
   </div>
 </div>
@@ -279,7 +285,7 @@ s.setAttribute('data-timestamp', +new Date());
 </div>
 <script type="text/javascript">
 	$(function(){
-		var currentURL = '1.3_mindmap.html';
+		var currentURL = '3.2_prob_list.html';
 		$('#side-nav a').each(function(){
 			if($(this).attr('href') == currentURL){
 				$(this).parent().addClass('active');
