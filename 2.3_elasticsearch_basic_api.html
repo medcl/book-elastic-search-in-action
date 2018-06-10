@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  思维导图 - Elastic 搜索开发实战
+  常用 API 介绍 - Elastic 搜索开发实战
   
   </title>
  <meta name="description" content="Elastic 搜索开发实战，图书">
@@ -179,15 +179,341 @@
             <div class="large-9 medium-9 columns">
 
  <div class="markdown-body">
-<h1>思维导图</h1>
+<h1>常用 API 介绍</h1>
 
-<p>为了帮助大家快速对本书的内容有一个全局的感性认识，同时也帮助我整理全书脉络，我在这里画了一个思维导图，本书相关的目录结构和相关的知识点也都放到了这个思维导图里面：</p>
+<p>前面介绍了 Elasticsearch 和 Kibana 的安装，这一节主要来介绍一下在 Kibana 里面的 DevTools 下，具体如何来进行最基本的 Elasticsearch 操作。</p>
 
-<p><img src="media/15285368486678/mindmap.png" alt="Elastic 搜索开发实战"/></p>
+<h2 id="toc_0">增删改查</h2>
 
-<blockquote>
-<p>本图后续可能会进行更新。</p>
-</blockquote>
+<p>首先是索引的操作，其实在第一节关于 Elasticsearch 安装的时候，已经介绍过，我们再来回顾一下。</p>
+
+<p>假设我们创建一个有包含 2 个字段的索引文档。</p>
+
+<pre><code class="language-js">POST twitter/doc/1
+{
+  &quot;name&quot;:&quot;jack&quot;,
+  &quot;age&quot;:30
+}
+</code></pre>
+
+<p>返回结果为：</p>
+
+<pre><code class="language-js">{
+  &quot;_index&quot;: &quot;twitter&quot;,
+  &quot;_type&quot;: &quot;doc&quot;,
+  &quot;_id&quot;: &quot;1&quot;,
+  &quot;_version&quot;: 1,
+  &quot;result&quot;: &quot;created&quot;,
+  &quot;_shards&quot;: {
+    &quot;total&quot;: 2,
+    &quot;successful&quot;: 1,
+    &quot;failed&quot;: 0
+  },
+  &quot;_seq_no&quot;: 0,
+  &quot;_primary_term&quot;: 1
+}
+</code></pre>
+
+<p>如果要取回这个文档，只需要将 POST 换成 GET，如下：</p>
+
+<pre><code class="language-js">GET twitter/doc/1
+</code></pre>
+
+<p>返回结果为：</p>
+
+<pre><code class="language-js">{
+  &quot;_index&quot;: &quot;twitter&quot;,
+  &quot;_type&quot;: &quot;doc&quot;,
+  &quot;_id&quot;: &quot;1&quot;,
+  &quot;_version&quot;: 1,
+  &quot;found&quot;: true,
+  &quot;_source&quot;: {
+    &quot;name&quot;: &quot;jack&quot;,
+    &quot;age&quot;: 30
+  }
+}
+</code></pre>
+
+<p>如果要修改这个文档，有两种方式，一种是完全替换，使用相同的路径即可，我们修改 age 为 35，如下：</p>
+
+<pre><code class="language-js">PUT twitter/doc/1
+{
+  &quot;name&quot;:&quot;jack&quot;,
+  &quot;age&quot;:35
+}
+</code></pre>
+
+<p>返回结果：</p>
+
+<pre><code class="language-js">{
+  &quot;_index&quot;: &quot;twitter&quot;,
+  &quot;_type&quot;: &quot;doc&quot;,
+  &quot;_id&quot;: &quot;1&quot;,
+  &quot;_version&quot;: 2,
+  &quot;result&quot;: &quot;updated&quot;,
+  &quot;_shards&quot;: {
+    &quot;total&quot;: 2,
+    &quot;successful&quot;: 1,
+    &quot;failed&quot;: 0
+  },
+  &quot;_seq_no&quot;: 1,
+  &quot;_primary_term&quot;: 1
+}
+</code></pre>
+
+<p>还一种更新叫做部分更新，你只需指定要更新的字段和该字段的值即可，不用准备完整的 JSON 文档，如下：</p>
+
+<pre><code class="language-js">POST twitter/doc/1/_update
+{
+    &quot;doc&quot; : {
+        &quot;name&quot; : &quot;mark&quot;
+    }
+}
+</code></pre>
+
+<p>最后我们再来看看删除，只需要把取回文档操作的 GET 换成 DELETE 就行了，如下：</p>
+
+<pre><code class="language-js">DELETE twitter/doc/1
+</code></pre>
+
+<p>返回：</p>
+
+<pre><code class="language-js">{
+  &quot;_index&quot;: &quot;twitter&quot;,
+  &quot;_type&quot;: &quot;doc&quot;,
+  &quot;_id&quot;: &quot;1&quot;,
+  &quot;_version&quot;: 4,
+  &quot;result&quot;: &quot;deleted&quot;,
+  &quot;_shards&quot;: {
+    &quot;total&quot;: 2,
+    &quot;successful&quot;: 1,
+    &quot;failed&quot;: 0
+  },
+  &quot;_seq_no&quot;: 3,
+  &quot;_primary_term&quot;: 1
+}
+</code></pre>
+
+<h2 id="toc_1">搜索的使用</h2>
+
+<p>我们创建两个索引文档，ID 分别是 1 和 2，如下：</p>
+
+<pre><code class="language-js">POST twitter/doc/1
+{
+  &quot;name&quot;:&quot;jack&quot;,
+  &quot;age&quot;:30
+}
+
+POST twitter/doc/2
+{
+  &quot;name&quot;:&quot;mark&quot;,
+  &quot;age&quot;:35
+}
+</code></pre>
+
+<p>现在我们想通过名称来进行搜索，可以使用 _search 接口，然后指定条件 <code>q</code> 来传递查询关键字，如下：</p>
+
+<pre><code class="language-js">GET twitter/_search?q=jack
+</code></pre>
+
+<p>返回：</p>
+
+<pre><code class="language-js">{
+  &quot;took&quot;: 51,
+  &quot;timed_out&quot;: false,
+  &quot;_shards&quot;: {
+    &quot;total&quot;: 5,
+    &quot;successful&quot;: 5,
+    &quot;skipped&quot;: 0,
+    &quot;failed&quot;: 0
+  },
+  &quot;hits&quot;: {
+    &quot;total&quot;: 1,
+    &quot;max_score&quot;: 0.2876821,
+    &quot;hits&quot;: [
+      {
+        &quot;_index&quot;: &quot;twitter&quot;,
+        &quot;_type&quot;: &quot;doc&quot;,
+        &quot;_id&quot;: &quot;1&quot;,
+        &quot;_score&quot;: 0.2876821,
+        &quot;_source&quot;: {
+          &quot;name&quot;: &quot;jack&quot;,
+          &quot;age&quot;: 30
+        }
+      }
+    ]
+  }
+}
+</code></pre>
+
+<p>或者通过年龄来进行检索，如下：</p>
+
+<pre><code class="language-js">GET twitter/_search?q=35
+</code></pre>
+
+<p>返回：</p>
+
+<pre><code class="language-js">{
+  &quot;took&quot;: 9,
+  &quot;timed_out&quot;: false,
+  &quot;_shards&quot;: {
+    &quot;total&quot;: 5,
+    &quot;successful&quot;: 5,
+    &quot;skipped&quot;: 0,
+    &quot;failed&quot;: 0
+  },
+  &quot;hits&quot;: {
+    &quot;total&quot;: 1,
+    &quot;max_score&quot;: 1,
+    &quot;hits&quot;: [
+      {
+        &quot;_index&quot;: &quot;twitter&quot;,
+        &quot;_type&quot;: &quot;doc&quot;,
+        &quot;_id&quot;: &quot;2&quot;,
+        &quot;_score&quot;: 1,
+        &quot;_source&quot;: {
+          &quot;name&quot;: &quot;mark&quot;,
+          &quot;age&quot;: 35
+        }
+      }
+    ]
+  }
+}
+</code></pre>
+
+<p>另外，我们还能限定查询的字段，如下：</p>
+
+<pre><code class="language-js">GET twitter/_search?q=age:35
+</code></pre>
+
+<p>除此以外，还能使用 QueryDSL 来写查询表达式，即将表达式以 JSON 的方式来通过请求的 Body 来传递，而不是走 URL 网址参数，如下：</p>
+
+<pre><code class="language-js">GET twitter/_search
+{
+  &quot;query&quot;: {
+    &quot;match&quot;: {
+      &quot;age&quot;: 35
+    }
+  }
+}
+</code></pre>
+
+<h2 id="toc_2">聚合的使用</h2>
+
+<p>我们再创建两个索引文档，如下：</p>
+
+<pre><code class="language-js">POST twitter/doc/3
+{
+  &quot;name&quot;:&quot;john&quot;,
+  &quot;age&quot;:30
+}
+POST twitter/doc/4
+{
+  &quot;name&quot;:&quot;mark&quot;,
+  &quot;age&quot;:40
+}
+</code></pre>
+
+<p>现在我们想统计一下，年龄的分布情况，可以使用如下的查询条件：</p>
+
+<pre><code class="language-js">GET twitter/_search
+{
+  &quot;size&quot;: 0,
+  &quot;aggs&quot;: {
+    &quot;age_stats&quot;: {
+      &quot;terms&quot;: {
+        &quot;field&quot;: &quot;age&quot;,
+        &quot;size&quot;: 10
+      }
+    }
+  }
+}
+</code></pre>
+
+<p>返回：</p>
+
+<pre><code class="language-js">{
+  &quot;took&quot;: 55,
+  &quot;timed_out&quot;: false,
+  &quot;_shards&quot;: {
+    &quot;total&quot;: 5,
+    &quot;successful&quot;: 5,
+    &quot;skipped&quot;: 0,
+    &quot;failed&quot;: 0
+  },
+  &quot;hits&quot;: {
+    &quot;total&quot;: 4,
+    &quot;max_score&quot;: 0,
+    &quot;hits&quot;: []
+  },
+  &quot;aggregations&quot;: {
+    &quot;age_stats&quot;: {
+      &quot;doc_count_error_upper_bound&quot;: 0,
+      &quot;sum_other_doc_count&quot;: 0,
+      &quot;buckets&quot;: [
+        {
+          &quot;key&quot;: 30,
+          &quot;doc_count&quot;: 2
+        },
+        {
+          &quot;key&quot;: 35,
+          &quot;doc_count&quot;: 1
+        },
+        {
+          &quot;key&quot;: 40,
+          &quot;doc_count&quot;: 1
+        }
+      ]
+    }
+  }
+}
+</code></pre>
+
+<h2 id="toc_3">索引的管理</h2>
+
+<p>查看索引列表:</p>
+
+<pre><code class="language-js">GET _cat/indices
+</code></pre>
+
+<p>返回：</p>
+
+<pre><code class="language-js">yellow open twitter       dmpz6x9QRYCaA9pw9ScO2w 5 1     4 0 14.5kb 14.5kb
+green  open .kibana       5CatbzsyQQOZLu1SYe7NAg 1 0     2 1  9.7kb  9.7kb
+</code></pre>
+
+<p>删除索引：</p>
+
+<pre><code class="language-js">DELETE twitter
+</code></pre>
+
+<h2 id="toc_4">集群的监控</h2>
+
+<p>查看集群的监控状况：</p>
+
+<pre><code class="language-js">GET _cluster/health
+</code></pre>
+
+<p>返回：</p>
+
+<pre><code class="language-js">{
+  &quot;cluster_name&quot;: &quot;elasticsearch&quot;,
+  &quot;status&quot;: &quot;yellow&quot;,
+  &quot;timed_out&quot;: false,
+  &quot;number_of_nodes&quot;: 1,
+  &quot;number_of_data_nodes&quot;: 1,
+  &quot;active_primary_shards&quot;: 14,
+  &quot;active_shards&quot;: 14,
+  &quot;relocating_shards&quot;: 0,
+  &quot;initializing_shards&quot;: 0,
+  &quot;unassigned_shards&quot;: 13,
+  &quot;delayed_unassigned_shards&quot;: 0,
+  &quot;number_of_pending_tasks&quot;: 0,
+  &quot;number_of_in_flight_fetch&quot;: 0,
+  &quot;task_max_waiting_in_queue_millis&quot;: 0,
+  &quot;active_shards_percent_as_number&quot;: 51.85185185185185
+}
+</code></pre>
 
 
 </div>
@@ -199,16 +525,13 @@
   <div style="width:50%;float:left;padding-left: 15px;">
 	<div class="text-left" style="padding:15px 0px;">
 		
-	        <a href="1.2_book_strcture.html"  title="Previous Post: 本书结构">&laquo; 本书结构</a>
+	        <a href="2.2_dev_tools.html"  title="Previous Post: 开发调试工具介绍">&laquo; 开发调试工具介绍</a>
 	    
 	</div>
   </div>
   <div style="width:50%;float:right;padding-right: 15px;">
 	<div class="text-right" style="padding:15px 0px;">
 		
-	        <a href="1.4_soft_version.html" 
-	        title="Next Post: 软件版本">软件版本 &raquo;</a>
-	    
 	</div>
   </div>
 </div>
@@ -242,7 +565,7 @@ s.setAttribute('data-timestamp', +new Date());
 </div>
 <script type="text/javascript">
 	$(function(){
-		var currentURL = '1.3_mindmap.html';
+		var currentURL = '2.3_elasticsearch_basic_api.html';
 		$('#side-nav a').each(function(){
 			if($(this).attr('href') == currentURL){
 				$(this).parent().addClass('active');
