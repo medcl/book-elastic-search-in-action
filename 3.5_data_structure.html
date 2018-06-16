@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  任务介绍 - Elastic 搜索开发实战
+  数据结构 - Elastic 搜索开发实战
   
   </title>
  <meta name="description" content="Elastic 搜索开发实战，图书">
@@ -263,59 +263,93 @@
             <div class="large-9 medium-9 columns">
 
  <div class="markdown-body">
-<h1>任务介绍</h1>
+<h1>数据结构</h1>
 
-<p>我们的目标网站是我们的 Elastic 中文社区：<a href="http://elasticsearch.cn">http://elasticsearch.cn</a>，为什么我们要改造其站内搜索功能呢？我们先来看下面的一张截图：</p>
+<p>社区网站的数据里面有很多张表，我们先只需要关心文章相关的表即可，表名<br/>
+<code>aws_article</code>，如下图：</p>
 
-<p><img src="media/15285964747097/15285983964703.jpg" alt=""/></p>
+<p><img src="media/15287928224682/15287973833321.jpg" alt=""/></p>
 
-<p>我们搜索的关键字是 <code>Elastic 搜开发实战</code>，可以看到智能提示框，里面的推荐结果貌似有点糟糕，有些结果看上去完全没有体现出和关键字有什么关系，感觉搜了之后还是找不到有用的东西。我们再看一个。</p>
+<p>很好，还看到数据了，我们暂时只需要关心 <code>title</code> 和 <code>message</code> 字段就好了，因为我们第一个搜索任务主要搜索这两个字段就可以。</p>
 
-<p><img src="media/15285964747097/15285987753533.jpg" alt=""/></p>
+<p>然后我们回忆起基础准备里面介绍的，Elasticsearch 索引的是 JSON 格式的文档，我们参照数据库字段，定义一个 JSON 文档，如下：</p>
 
-<p>将一篇日报的完整标题作为关键字搜索，在搜索结果里面，居然不是排在第一位的。</p>
-
-<p>我们再随便打开一篇文章：<a href="https://elasticsearch.cn/question/1023">https://elasticsearch.cn/question/1023</a>，内容如下图：</p>
-
-<p><img src="media/15285964747097/15285998430298.jpg" alt=""/></p>
-
-<p>我们随便复制一段文字：</p>
-
-<pre><code>Understand the industrial trend of big data technology (e.g. elasticsearch, web crawler, Kafka).
+<pre><code class="language-js">{
+&quot;title&quot;:&quot;hello world&quot;,
+&quot;message&quot;:&quot;i am hello world&quot;
+}
 </code></pre>
 
-<p>然后放到搜索框里面检索一下，结果如下：</p>
+<p>是不是就行了？NO，我们试想一下，搜索得到这个结果之后，是不是还需要打开对应的网页啊，那要把唯一标识也加上才能生成对应的详情页网址进行跳转，另外显示结果的时候，是不是还要显示一下作者的信息呢，是不是还要显示一下发布时间呢，是不是还要显示评论个数和查看次数呢，是不是还要显示分类信息呢，统统有必要！这些信息越完整，用户越能尽早查看并做决策是否要进行点击来查看详情页面，所以，我们也要把这些字段加上。</p>
 
-<p><img src="media/15285964747097/15285997280401.jpg" alt=""/></p>
+<p>我们把 Mock 的这个 JSON 示例索引文档提交到索引 <code>forum</code> 里面：</p>
 
-<p>可以看到，完全找不到我们的刚刚的那篇文章。</p>
+<pre><code class="language-js">POST forum/doc/1
+{
+  &quot;title&quot;: &quot;hello world&quot;,
+  &quot;message&quot;: &quot;i am a simple message&quot;,
+  &quot;id&quot;: &quot;62&quot;,
+  &quot;uid&quot;: &quot;1038&quot;,
+  &quot;comments&quot;: &quot;1&quot;,
+  &quot;views&quot;: &quot;1231&quot;,
+  &quot;addtime&quot;: &quot;1456042765&quot;,
+  &quot;votes&quot;: &quot;12&quot;,
+  &quot;category_id&quot;: &quot;2&quot;
+}
+</code></pre>
 
-<p>我们再来搜索一下  <code>学习</code>，看看结果：</p>
+<p>并执行一个查询，如下图：</p>
 
-<p><img src="media/15285964747097/15286008013887.jpg" alt=""/></p>
+<pre><code class="language-js">GET forum/_search
+{
+  &quot;query&quot;: {
+    &quot;multi_match&quot;: {
+      &quot;query&quot;: &quot;i am a simple message&quot;
+    }
+  }
+}
+</code></pre>
 
-<p>有不少结果返回，然后再搜索一下 拼音 <code>xuexi</code>，看看结果：</p>
+<p>查询结果：</p>
 
-<p><img src="media/15285964747097/15286007456235.jpg" alt=""/></p>
+<pre><code class="language-js">{
+  &quot;took&quot;: 0,
+  &quot;timed_out&quot;: false,
+  &quot;_shards&quot;: {
+    &quot;total&quot;: 5,
+    &quot;successful&quot;: 5,
+    &quot;skipped&quot;: 0,
+    &quot;failed&quot;: 0
+  },
+  &quot;hits&quot;: {
+    &quot;total&quot;: 1,
+    &quot;max_score&quot;: 0.5753642,
+    &quot;hits&quot;: [
+      {
+        &quot;_index&quot;: &quot;forum&quot;,
+        &quot;_type&quot;: &quot;doc&quot;,
+        &quot;_id&quot;: &quot;1&quot;,
+        &quot;_score&quot;: 0.5753642,
+        &quot;_source&quot;: {
+          &quot;title&quot;: &quot;hello world&quot;,
+          &quot;message&quot;: &quot;i am a simple message&quot;,
+          &quot;id&quot;: &quot;62&quot;,
+          &quot;uid&quot;: &quot;1038&quot;,
+          &quot;comments&quot;: &quot;1&quot;,
+          &quot;views&quot;: &quot;1231&quot;,
+          &quot;addtime&quot;: &quot;1456042765&quot;,
+          &quot;votes&quot;: &quot;12&quot;,
+          &quot;category_id&quot;: &quot;2&quot;
+        }
+      }
+    ]
+  }
+}
+</code></pre>
 
-<p>可以看到只找到了一个信息。</p>
+<p>可以看到，我们已经能够通过关键字搜索到这个文档，虽然我们数据库的数据还没真的进入到 Elasticsearch 里面，此处也不是真实数据，但是我们就可以提前在Elasticsearch 里面进行搜索功能验证。这个也是 Elasticsearch 的强大之处。非常简单且可大大提高开发效率和减少原型验证时间。</p>
 
-<p>我们再试试繁体 <code>學習</code>，看看搜索结果：<br/>
-<img src="media/15285964747097/15286006755574.jpg" alt=""/></p>
-
-<p>居然查询结果各不相同啊，但是对于搜索的用户来说，我本来就不知道有什么东西，我只是随便丢一个关键字就是想找找看，<code>学习</code>、<code>xuexi</code> 和 <code>學習</code> 应该无差别才对。</p>
-
-<p>还有一个就是社区分享的 PPT，比如我想快速找到我感兴趣的 PPT，如下图：</p>
-
-<p><img src="media/15285964747097/15285991022218.jpg" alt=""/></p>
-
-<p>因为这个分享的功能是新开发的，相关内容也没有加入到数据库的索引里面，所以按 PPT 的标题、描述和 PPT 里面的文本都查不到。</p>
-
-<p>另外结果多了之后，一页一页的找也很麻烦，而且如果我想找最近一个月的文章，或者按分类、标签或者作者进行查看，也不行。没有各个维度的统计。没有对搜索结果的再过滤。</p>
-
-<p>这些都是用户的痛点。</p>
-
-<p>也就是本章我们要解决的任务。</p>
+<p>下一步，我们只要想办法把数据库里面的行列格式的数据转换成上面的 JSON 文档格式就可以了。</p>
 
 
 </div>
@@ -327,16 +361,13 @@
   <div style="width:50%;float:left;padding-left: 15px;">
 	<div class="text-left" style="padding:15px 0px;">
 		
-	        <a href="2.3_elasticsearch_basic_api.html"  title="Previous Post: 常用 API 介绍">&laquo; 常用 API 介绍</a>
+	        <a href="3.4_architecture.html"  title="Previous Post: 总体架构">&laquo; 总体架构</a>
 	    
 	</div>
   </div>
   <div style="width:50%;float:right;padding-right: 15px;">
 	<div class="text-right" style="padding:15px 0px;">
 		
-	        <a href="3.2_prob_list.html" 
-	        title="Next Post: 问题列表">问题列表 &raquo;</a>
-	    
 	</div>
   </div>
 </div>
@@ -370,7 +401,7 @@ s.setAttribute('data-timestamp', +new Date());
 </div>
 <script type="text/javascript">
 	$(function(){
-		var currentURL = '3.1_task_intro.html';
+		var currentURL = '3.5_data_structure.html';
 		$('#side-nav a').each(function(){
 			if($(this).attr('href') == currentURL){
 				$(this).parent().addClass('active');

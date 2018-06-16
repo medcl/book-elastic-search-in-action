@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  任务介绍 - Elastic 搜索开发实战
+  总体架构 - Elastic 搜索开发实战
   
   </title>
  <meta name="description" content="Elastic 搜索开发实战，图书">
@@ -263,59 +263,27 @@
             <div class="large-9 medium-9 columns">
 
  <div class="markdown-body">
-<h1>任务介绍</h1>
+<h1>总体架构</h1>
 
-<p>我们的目标网站是我们的 Elastic 中文社区：<a href="http://elasticsearch.cn">http://elasticsearch.cn</a>，为什么我们要改造其站内搜索功能呢？我们先来看下面的一张截图：</p>
+<p>确定好了功能范围之后，我们再来分析一下目前的网站的架构和新的架构。</p>
 
-<p><img src="media/15285964747097/15285983964703.jpg" alt=""/></p>
+<p>现有架构， 假定版本为 v1.0：</p>
 
-<p>我们搜索的关键字是 <code>Elastic 搜开发实战</code>，可以看到智能提示框，里面的推荐结果貌似有点糟糕，有些结果看上去完全没有体现出和关键字有什么关系，感觉搜了之后还是找不到有用的东西。我们再看一个。</p>
+<p>PHP + MySQL<br/>
+【无图】</p>
 
-<p><img src="media/15285964747097/15285987753533.jpg" alt=""/></p>
+<p>没错，就是这么简单，PHP 直接访问 MySQL 数据库，没有各种高大上的组间，我都不用画图了！</p>
 
-<p>将一篇日报的完整标题作为关键字搜索，在搜索结果里面，居然不是排在第一位的。</p>
+<blockquote>
+<p>注：PHP 和 MySQL 的知识储备就不在本书讨论了，大家自行搜索解决吧。</p>
+</blockquote>
 
-<p>我们再随便打开一篇文章：<a href="https://elasticsearch.cn/question/1023">https://elasticsearch.cn/question/1023</a>，内容如下图：</p>
+<p>新的架构，引入了 Elasticsearch 来提供更好的搜索体验，改进版本即为 v1.1：</p>
 
-<p><img src="media/15285964747097/15285998430298.jpg" alt=""/></p>
+<p>PHP + MySQL + Elasticsearch<br/>
+【无图】</p>
 
-<p>我们随便复制一段文字：</p>
-
-<pre><code>Understand the industrial trend of big data technology (e.g. elasticsearch, web crawler, Kafka).
-</code></pre>
-
-<p>然后放到搜索框里面检索一下，结果如下：</p>
-
-<p><img src="media/15285964747097/15285997280401.jpg" alt=""/></p>
-
-<p>可以看到，完全找不到我们的刚刚的那篇文章。</p>
-
-<p>我们再来搜索一下  <code>学习</code>，看看结果：</p>
-
-<p><img src="media/15285964747097/15286008013887.jpg" alt=""/></p>
-
-<p>有不少结果返回，然后再搜索一下 拼音 <code>xuexi</code>，看看结果：</p>
-
-<p><img src="media/15285964747097/15286007456235.jpg" alt=""/></p>
-
-<p>可以看到只找到了一个信息。</p>
-
-<p>我们再试试繁体 <code>學習</code>，看看搜索结果：<br/>
-<img src="media/15285964747097/15286006755574.jpg" alt=""/></p>
-
-<p>居然查询结果各不相同啊，但是对于搜索的用户来说，我本来就不知道有什么东西，我只是随便丢一个关键字就是想找找看，<code>学习</code>、<code>xuexi</code> 和 <code>學習</code> 应该无差别才对。</p>
-
-<p>还有一个就是社区分享的 PPT，比如我想快速找到我感兴趣的 PPT，如下图：</p>
-
-<p><img src="media/15285964747097/15285991022218.jpg" alt=""/></p>
-
-<p>因为这个分享的功能是新开发的，相关内容也没有加入到数据库的索引里面，所以按 PPT 的标题、描述和 PPT 里面的文本都查不到。</p>
-
-<p>另外结果多了之后，一页一页的找也很麻烦，而且如果我想找最近一个月的文章，或者按分类、标签或者作者进行查看，也不行。没有各个维度的统计。没有对搜索结果的再过滤。</p>
-
-<p>这些都是用户的痛点。</p>
-
-<p>也就是本章我们要解决的任务。</p>
+<p>同样非常简单！</p>
 
 
 </div>
@@ -327,15 +295,15 @@
   <div style="width:50%;float:left;padding-left: 15px;">
 	<div class="text-left" style="padding:15px 0px;">
 		
-	        <a href="2.3_elasticsearch_basic_api.html"  title="Previous Post: 常用 API 介绍">&laquo; 常用 API 介绍</a>
+	        <a href="3.3_task_decomposition.html"  title="Previous Post: 功能分解">&laquo; 功能分解</a>
 	    
 	</div>
   </div>
   <div style="width:50%;float:right;padding-right: 15px;">
 	<div class="text-right" style="padding:15px 0px;">
 		
-	        <a href="3.2_prob_list.html" 
-	        title="Next Post: 问题列表">问题列表 &raquo;</a>
+	        <a href="3.5_data_structure.html" 
+	        title="Next Post: 数据结构">数据结构 &raquo;</a>
 	    
 	</div>
   </div>
@@ -370,7 +338,7 @@ s.setAttribute('data-timestamp', +new Date());
 </div>
 <script type="text/javascript">
 	$(function(){
-		var currentURL = '3.1_task_intro.html';
+		var currentURL = '3.4_architecture.html';
 		$('#side-nav a').each(function(){
 			if($(this).attr('href') == currentURL){
 				$(this).parent().addClass('active');

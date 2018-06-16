@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  任务介绍 - Elastic 搜索开发实战
+  功能分解 - Elastic 搜索开发实战
   
   </title>
  <meta name="description" content="Elastic 搜索开发实战，图书">
@@ -263,59 +263,30 @@
             <div class="large-9 medium-9 columns">
 
  <div class="markdown-body">
-<h1>任务介绍</h1>
+<h1>功能分解</h1>
 
-<p>我们的目标网站是我们的 Elastic 中文社区：<a href="http://elasticsearch.cn">http://elasticsearch.cn</a>，为什么我们要改造其站内搜索功能呢？我们先来看下面的一张截图：</p>
+<p>这一节我们来进行功能的分解，结合上一节提到的问题，看起来其实很多问题需要解决，所以我们如果不拆解一下，根本无从下手。</p>
 
-<p><img src="media/15285964747097/15285983964703.jpg" alt=""/></p>
+<p>首先，我们先确定做一个最基本的搜索，替换掉现有的搜索。完成一个功能之后，再考虑添加和完善其他的功能，做到各个击破。</p>
 
-<p>我们搜索的关键字是 <code>Elastic 搜开发实战</code>，可以看到智能提示框，里面的推荐结果貌似有点糟糕，有些结果看上去完全没有体现出和关键字有什么关系，感觉搜了之后还是找不到有用的东西。我们再看一个。</p>
+<p>其次，是数据的处理问题，我们先要把相关数据从现有的 MySQL 里面放到 Elasticsearch 里面才具备使用 Elasticsearch 搜索能力的条件。这是第二步。</p>
 
-<p><img src="media/15285964747097/15285987753533.jpg" alt=""/></p>
+<p>最后，我们要研究一下网站的 PHP 代码，看如何才能替换为新的搜索结果展现，最好做到能可切换恢复之前的搜索。</p>
 
-<p>将一篇日报的完整标题作为关键字搜索，在搜索结果里面，居然不是排在第一位的。</p>
+<p>好，我们进一步细化如下：</p>
 
-<p>我们再随便打开一篇文章：<a href="https://elasticsearch.cn/question/1023">https://elasticsearch.cn/question/1023</a>，内容如下图：</p>
+<p>第一步，我们就约定好先进行文章的搜索替换吧。<br/>
+也就是在搜索框里面能够通过关键字找到对应的文章，就这么简单。</p>
 
-<p><img src="media/15285964747097/15285998430298.jpg" alt=""/></p>
+<p>第二步，数据的问题，我们需要找到对应的 MySQL 表，然后导出到 Elasticsearch 里面去。不做实时同步，先对历史数据可以查。</p>
 
-<p>我们随便复制一段文字：</p>
+<p>第三步，UI 界面，我们能够显示文章列表和基本信息就行了。</p>
 
-<pre><code>Understand the industrial trend of big data technology (e.g. elasticsearch, web crawler, Kafka).
-</code></pre>
+<p>我们先确定功能范围，这个算是万里长征的第一步。</p>
 
-<p>然后放到搜索框里面检索一下，结果如下：</p>
+<p>然后我们再明确一下验收场景，通过中文社区的搜索框，输入一篇现有文章里面或者或者正文包含的关键字能找到文章，非常简单的验收场景。</p>
 
-<p><img src="media/15285964747097/15285997280401.jpg" alt=""/></p>
-
-<p>可以看到，完全找不到我们的刚刚的那篇文章。</p>
-
-<p>我们再来搜索一下  <code>学习</code>，看看结果：</p>
-
-<p><img src="media/15285964747097/15286008013887.jpg" alt=""/></p>
-
-<p>有不少结果返回，然后再搜索一下 拼音 <code>xuexi</code>，看看结果：</p>
-
-<p><img src="media/15285964747097/15286007456235.jpg" alt=""/></p>
-
-<p>可以看到只找到了一个信息。</p>
-
-<p>我们再试试繁体 <code>學習</code>，看看搜索结果：<br/>
-<img src="media/15285964747097/15286006755574.jpg" alt=""/></p>
-
-<p>居然查询结果各不相同啊，但是对于搜索的用户来说，我本来就不知道有什么东西，我只是随便丢一个关键字就是想找找看，<code>学习</code>、<code>xuexi</code> 和 <code>學習</code> 应该无差别才对。</p>
-
-<p>还有一个就是社区分享的 PPT，比如我想快速找到我感兴趣的 PPT，如下图：</p>
-
-<p><img src="media/15285964747097/15285991022218.jpg" alt=""/></p>
-
-<p>因为这个分享的功能是新开发的，相关内容也没有加入到数据库的索引里面，所以按 PPT 的标题、描述和 PPT 里面的文本都查不到。</p>
-
-<p>另外结果多了之后，一页一页的找也很麻烦，而且如果我想找最近一个月的文章，或者按分类、标签或者作者进行查看，也不行。没有各个维度的统计。没有对搜索结果的再过滤。</p>
-
-<p>这些都是用户的痛点。</p>
-
-<p>也就是本章我们要解决的任务。</p>
+<p>接下来，我们就可以查看数据库表结构了。</p>
 
 
 </div>
@@ -327,15 +298,15 @@
   <div style="width:50%;float:left;padding-left: 15px;">
 	<div class="text-left" style="padding:15px 0px;">
 		
-	        <a href="2.3_elasticsearch_basic_api.html"  title="Previous Post: 常用 API 介绍">&laquo; 常用 API 介绍</a>
+	        <a href="3.2_prob_list.html"  title="Previous Post: 问题列表">&laquo; 问题列表</a>
 	    
 	</div>
   </div>
   <div style="width:50%;float:right;padding-right: 15px;">
 	<div class="text-right" style="padding:15px 0px;">
 		
-	        <a href="3.2_prob_list.html" 
-	        title="Next Post: 问题列表">问题列表 &raquo;</a>
+	        <a href="3.4_architecture.html" 
+	        title="Next Post: 总体架构">总体架构 &raquo;</a>
 	    
 	</div>
   </div>
@@ -370,7 +341,7 @@ s.setAttribute('data-timestamp', +new Date());
 </div>
 <script type="text/javascript">
 	$(function(){
-		var currentURL = '3.1_task_intro.html';
+		var currentURL = '3.3_task_decomposition.html';
 		$('#side-nav a').each(function(){
 			if($(this).attr('href') == currentURL){
 				$(this).parent().addClass('active');
