@@ -275,7 +275,83 @@
  <div class="markdown-body">
 <h1>数据迁移</h1>
 
-<p>我们选择 Logstash 来进行数据的迁移，Logstash 是一个开源的 ETL 中间件工具，可以支持多种数据源，我们这里的数据源就是社区的 MySQL 数据库。</p>
+<p>我们选择 Logstash 来进行数据的迁移，Logstash 是一个开源的 ETL 中间件工具，可以支持多种数据源，我们这里的数据源就是社区的 MySQL 数据库。这一节我来给大家介绍具体如何来操作。</p>
+
+<p>首先，是 Logstash 的下载安装，打开网址：<br/>
+<a href="https://www.elastic.co/downloads/logstash">https://www.elastic.co/downloads/logstash</a>，选择 Zip 包下载，同样和 Elasticsearch 一样需要 Java 环境。</p>
+
+<p><img src="media/15291474087616/15295022225057.jpg" alt=""/></p>
+
+<p>下载并解压 Logstash 到目录：/Users/medcl/Downloads/6.3.0/logstash-6.3.0</p>
+
+<p>我们因为要使用 JDBC 来访问 MySQL 数据，所以我们还需要下载一个 MySQL 的 JDBC Connector，<br/>
+根据这个页面：<a href="https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-versions.html">https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-versions.html</a>里面的 Connector 和 MySQL 的版本对照关系，<br/>
+我们打开网址：<a href="https://downloads.mysql.com/archives/c-j/">https://downloads.mysql.com/archives/c-j/</a>，选择产品版本 5.1.45，点击 zip 包下载链接即可开始下载。</p>
+
+<p><img src="media/15291474087616/15295024508299.jpg" alt=""/></p>
+
+<p>解压 Connector 到目录：/Users/medcl/Downloads/mysql-connector-java-5.1.45，文件：mysql-connector-java-5.1.45-bin.jar 就是我们后面要给 Logstash 来使用的 JDBC 驱动，完整的路径就是：<code>/Users/medcl/Downloads/mysql-connector-java-5.1.45/mysql-connector-java-5.1.45-bin.jar</code></p>
+
+<p><img src="media/15291474087616/15295026994699.jpg" alt=""/></p>
+
+<p>接下来，开始使用 Logstash 来连接 MySQL 数据库，切换到 Logstash 所在目录：/Users/medcl/Downloads/6.3.0/logstash-6.3.0，我们在这个目录创建一个 Logstash 的配置文件：jdbc.conf，文件内容如下：</p>
+
+<pre><code class="language-conf">input {
+  jdbc {
+    jdbc_driver_library =&gt; &quot;/Users/medcl/Downloads/mysql-connector-java-5.1.45/mysql-connector-java-5.1.45-bin.jar&quot;
+    jdbc_driver_class =&gt; &quot;Java::com.mysql.jdbc.Driver&quot;
+    jdbc_connection_string =&gt; &quot;jdbc:mysql://127.0.0.1:3306/qa_es&quot;
+    jdbc_user =&gt; &quot;root&quot;
+    jdbc_password =&gt; &quot;qeephp&quot;
+    statement =&gt; &quot;SELECT `aws_article`.`id`, `aws_article`.`uid`, `aws_article`.`title`, `aws_article`.`message`, `aws_article`.`comments`, `aws_article`.`views`, `aws_article`.`add_time` as addtime, `aws_article`.`has_attach`, `aws_article`.`votes`, `aws_article`.`category_id` FROM `qa_es`.`aws_article`&quot;
+    jdbc_paging_enabled =&gt; &quot;true&quot;
+    jdbc_page_size =&gt; &quot;50000&quot;
+  }
+}
+
+filter {
+}
+
+output {
+  stdout {
+    codec =&gt; rubydebug
+  }
+ 
+  elasticsearch {
+    index =&gt; &quot;forum-mysql&quot;
+  }
+}
+
+</code></pre>
+
+<p>执行命令，启动 Logstash，如下图：</p>
+
+<pre><code class="language-js">➜  logstash-6.3.0 ./bin/logstash -f jdbc.conf
+</code></pre>
+
+<p>程序正常运行输出很多信息，且自动退出，如下图：</p>
+
+<p><img src="media/15291474087616/15295066370428.jpg" alt=""/></p>
+
+<p>我们打开 Kibana 查看一下索引:</p>
+
+<p><img src="media/15291474087616/15295065252883.jpg" alt=""/></p>
+
+<p>果然看到有数据导入到 forum-mysql 这个索引里面了，且看到 Total 显示共有 90 条记录，和 MySQL 里面的文章总数一致，再执行一下上一节测试用的搜索语句:</p>
+
+<p><img src="media/15291474087616/15295067664174.jpg" alt=""/></p>
+
+<p>可以找到数据库里面的对应的文章记录，简直完美！</p>
+
+<ul>
+<li><p>Tip 1，如果启动 Logstash 的时候遇到类似错误： </p>
+
+<pre><code class="language-js">Error: Java::com.mysql.jdbc.Driver not loaded. Are you sure you&#39;ve included the correct jdbc driver in :jdbc_driver_library?
+</code></pre>
+
+<p>请尝试使用 JDK 8 来运行 Logstash。</p></li>
+<li><p>Tip 2，Logstash 配置文件里面的statement 参数设置的 SQL 字符串末尾不要加上 <code>;</code>，否则会报错。</p></li>
+</ul>
 
 
 </div>
