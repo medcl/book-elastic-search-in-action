@@ -29,7 +29,7 @@
 <nav class="top-bar docs-bar hide-for-small" data-topbar>
 
 <div id="header">
-    <h1><a href="index.html">Elastic 搜索开发实战</a> <div style="float: right;"><a class="github-button" href="https://github.com/medcl/book-elastic-search-in-action" data-size="large" data-show-count="true" aria-label="Star medcl/book-elastic-search-in-action on GitHub">Star</a></div></h1>
+    <span style="font-size: 30px;"><a href="index.html">Elastic 搜索开发实战</a></span> <div style="float: right;"><a class="github-button" href="https://github.com/medcl/book-elastic-search-in-action" data-size="large" data-show-count="true" aria-label="Star medcl/book-elastic-search-in-action on GitHub">Star</a></div>
 </div>
 
 </nav>
@@ -126,6 +126,10 @@
           
               
                 <li class="sub_nav"><a title="数据迁移" href="3.6_data_migration.html">数据迁移</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="搜索提示" href="3.7_autocomplete.html">搜索提示</a></li>
               
           
 
@@ -264,6 +268,12 @@
 
                         
 
+                        
+                          <li><a title="搜索提示" href="3.7_autocomplete.html">搜索提示</a></li>
+                                      
+
+                        
+
                     
                   </ul>
                 </nav>
@@ -272,7 +282,14 @@
             </div>
             <div class="large-9 medium-9 columns">
 
- <div class="markdown-body">
+ <!-- start toc -->
+<div style="background: #fbf7f7; margin-top: 35px;padding: 10px;">
+  <link rel="stylesheet" href="asset/css/zTreeStyle/zTreeStyle.css" type="text/css">
+        <ul id="tree" class="ztree"></ul>
+</div>   
+<!-- end toc -->
+
+<div class="markdown-body">
 <h1>添加站内搜索功能</h1>
 
 <p>这一章，我们就开始进行本书的第一个实战任务，为现有网站添加站内搜索功能。</p>
@@ -297,15 +314,13 @@
   <div style="width:50%;float:left;padding-left: 15px;">
 	<div class="text-left" style="padding:15px 0px;">
 		
-	        <a href="2.3_elasticsearch_basic_api.html"  title="Previous Post: 常用 API 介绍">&laquo; 常用 API 介绍</a>
-	    
 	</div>
   </div>
   <div style="width:50%;float:right;padding-right: 15px;">
 	<div class="text-right" style="padding:15px 0px;">
 		
-	        <a href="3.1_task_intro.html" 
-	        title="Next Post: 任务介绍">任务介绍 &raquo;</a>
+	        <a href="0.1_abstract.html" 
+	        title="Next Post: 摘要">摘要 &raquo;</a>
 	    
 	</div>
   </div>
@@ -347,7 +362,23 @@ s.setAttribute('data-timestamp', +new Date());
 			}
 		});
 	});
-</script>  
+</script>
+
+<!-- toc -->
+<script src="asset/js/jquery.ztree.all-3.5.min.js?v=4?v=20151125" type="text/javascript"></script>
+<script src="asset/js/ztree_toc.js?v=4?v=20151125" type="text/javascript"></script>
+<SCRIPT type="text/javascript" >
+  <!--
+  $(document).ready(function(){
+    $('#tree').ztree_toc({
+      is_auto_number:true
+    });
+  });
+  //-->
+  </SCRIPT>
+  <!-- toc -->
+
+  
 </div></div>
 
 
@@ -372,7 +403,25 @@ s.setAttribute('data-timestamp', +new Date());
     <script src="asset/js/foundation.min.js"></script>
     <script src="asset/js/foundation/foundation.offcanvas.js"></script>
     
+<!-- UserVoice JavaScript SDK (only needed once on a page) -->
+<script>(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='http://widget.uservoice.com/c1PjjxGIoKy3HUGvYKodbA.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})()</script>
 
+<!-- A tab to launch the Classic Widget -->
+<script>
+UserVoice = window.UserVoice || [];
+UserVoice.push(['showTab', 'classic_widget', {
+  mode: 'feedback',
+  primary_color: '#fa8c28',
+  link_color: '#0a8cc6',
+  forum_id: 53824,
+  support_tab_name: '联系我',
+  feedback_tab_name: '给予反馈',
+  tab_label: '意见反馈',
+  tab_color: '#2369d9',
+  tab_position: 'middle-right',
+  tab_inverted: false
+}]);
+</script>
 
 
     <script>

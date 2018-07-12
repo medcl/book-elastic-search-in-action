@@ -1,0 +1,1484 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  搜索提示 - Elastic 搜索开发实战
+  
+  </title>
+ <meta name="description" content="Elastic 搜索开发实战，图书">
+ <link href="atom.xml" rel="alternate" title="Elastic 搜索开发实战" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+    <script src="asset/highlightjs/highlight.pack.js"></script>
+    <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+<div id="header">
+    <span style="font-size: 30px;"><a href="index.html">Elastic 搜索开发实战</a></span> <div style="float: right;"><a class="github-button" href="https://github.com/medcl/book-elastic-search-in-action" data-size="large" data-show-count="true" aria-label="Star medcl/book-elastic-search-in-action on GitHub">Star</a></div>
+</div>
+
+</nav>
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Elastic 搜索开发实战</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+      <li><a href="index.html">Home</a></li>
+
+		 
+
+      
+        <li class="divider"></li>             
+          
+              
+                <li><a title="摘要" href="0.1_abstract.html">摘要</a></li> 
+              
+          
+
+      
+        <li class="divider"></li>             
+          
+              
+                <li><a title="前言" href="1.0_preface.html">前言</a></li> 
+              
+          
+              
+                <li class="sub_nav"><a title="谁应该读这本书" href="1.1_who_should_read_this_book.html">谁应该读这本书</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="本书结构" href="1.2_book_strcture.html">本书结构</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="思维导图" href="1.3_mindmap.html">思维导图</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="软件版本" href="1.4_soft_version.html">软件版本</a></li>
+              
+          
+
+      
+        <li class="divider"></li>             
+          
+              
+                <li><a title="基础准备" href="2.0_basic_concept.html">基础准备</a></li> 
+              
+          
+              
+                <li class="sub_nav"><a title="安装使用 Elasticsearch" href="2.1_install_elasticsearch.html">安装使用 Elasticsearch</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="开发调试工具介绍" href="2.2_dev_tools.html">开发调试工具介绍</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="常用 API 介绍" href="2.3_elasticsearch_basic_api.html">常用 API 介绍</a></li>
+              
+          
+
+      
+        <li class="divider"></li>             
+          
+              
+                <li><a title="添加站内搜索功能" href="3.0_site_search.html">添加站内搜索功能</a></li> 
+              
+          
+              
+                <li class="sub_nav"><a title="任务介绍" href="3.1_task_intro.html">任务介绍</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="问题列表" href="3.2_prob_list.html">问题列表</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="功能分解" href="3.3_task_decomposition.html">功能分解</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="总体架构" href="3.4_architecture.html">总体架构</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="数据结构" href="3.5_data_structure.html">数据结构</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="数据迁移" href="3.6_data_migration.html">数据迁移</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="搜索提示" href="3.7_autocomplete.html">搜索提示</a></li>
+              
+          
+
+      
+      </ul>
+
+ <div>
+ 	<br/>
+ 	&nbsp;&nbsp; <a class="github-button" href="https://github.com/medcl/book-elastic-search-in-action" data-size="large" data-show-count="true" aria-label="Star medcl/book-elastic-search-in-action on GitHub">Star</a></div>
+
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+        <section id="main-content" role="main" class="scroll-container">
+
+          <div class="row">
+            <div class="large-3 medium-3 columns">
+              <div class="hide-for-small">
+                <div class="sidebar">
+                <nav>
+                  <ul id="side-nav" class="side-nav">
+					 
+
+                    
+                    
+
+                        
+                          <li class="side-title"><span><a title="摘要" href="0.1_abstract.html">摘要</a></span></li>
+                                      
+
+                        
+
+                    
+                    
+
+                        
+                          <li class="side-title"><span><a title="前言" href="1.0_preface.html">前言</a></span></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="谁应该读这本书" href="1.1_who_should_read_this_book.html">谁应该读这本书</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="本书结构" href="1.2_book_strcture.html">本书结构</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="思维导图" href="1.3_mindmap.html">思维导图</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="软件版本" href="1.4_soft_version.html">软件版本</a></li>
+                                      
+
+                        
+
+                    
+                    
+
+                        
+                          <li class="side-title"><span><a title="基础准备" href="2.0_basic_concept.html">基础准备</a></span></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="安装使用 Elasticsearch" href="2.1_install_elasticsearch.html">安装使用 Elasticsearch</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="开发调试工具介绍" href="2.2_dev_tools.html">开发调试工具介绍</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="常用 API 介绍" href="2.3_elasticsearch_basic_api.html">常用 API 介绍</a></li>
+                                      
+
+                        
+
+                    
+                    
+
+                        
+                          <li class="side-title"><span><a title="添加站内搜索功能" href="3.0_site_search.html">添加站内搜索功能</a></span></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="任务介绍" href="3.1_task_intro.html">任务介绍</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="问题列表" href="3.2_prob_list.html">问题列表</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="功能分解" href="3.3_task_decomposition.html">功能分解</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="总体架构" href="3.4_architecture.html">总体架构</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="数据结构" href="3.5_data_structure.html">数据结构</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="数据迁移" href="3.6_data_migration.html">数据迁移</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="搜索提示" href="3.7_autocomplete.html">搜索提示</a></li>
+                                      
+
+                        
+
+                    
+                  </ul>
+                </nav>
+                </div>
+              </div>
+            </div>
+            <div class="large-9 medium-9 columns">
+
+ <!-- start toc -->
+<div style="background: #fbf7f7; margin-top: 35px;padding: 10px;">
+  <link rel="stylesheet" href="asset/css/zTreeStyle/zTreeStyle.css" type="text/css">
+        <ul id="tree" class="ztree"></ul>
+</div>   
+<!-- end toc -->
+
+<div class="markdown-body">
+<h1>搜索提示</h1>
+
+<p>搜索提示、智能提示、自动完成、自动补全，都是说的一个东西，就是当用户在输入框输入想要查询的内容的时候，在关键字还没有完全输入完成之前，能够根据每次输入的部分字词进行提示，在用户一边输入的时候，给用户以提示甚至提取让用户找到最终想要的结果，从而提升用户的搜索体验，这个功能基本上是做搜索的一个基本需求。</p>
+
+<p>我们本节主要来探讨一下如何实现这种搜索提示的功能。</p>
+
+<p>一般搜索提示工作的原理是，当用户在文本框里面输入的时候，会触发一个输入事件，JS 在浏览器捕捉到这个事件，构造一个 AJAX 异步 HTTP 查询请求，服务器接受到这个包含了用户输入关键字的请求，通过这个关键字在服务端进行查询，尽可能找到相关的数据，发送到浏览器端，浏览器端获取服务器的响应数据，在浏览器端动态渲染出一个搜索结果列表，并显示出来。</p>
+
+<p>除了上面的这些，还需要处理诸如请求的处理与回调，确保请求响应回调的先后顺序，控制请求的频率，本地的缓存的处理，另外搜索结果的展现也要做到自由布局和样式自定义。可以说要做好一个搜索提示其实不是那么容易。</p>
+
+<h2 id="toc_0">UI 设计</h2>
+
+<p>还有一个就是搜索提示的界面设计，也很重要，我们先来看看目前主流网站的几种常见的搜索提示的实现，参考一下。</p>
+
+<ul>
+<li> 百度 (Baidu.com)
+<img src="media/15308021492726/15309728545697.jpg" alt=""/></li>
+</ul>
+
+<p>国内最大的搜索引擎，百度的搜索提示，我们输入 Elasticsearch，可以看到有4个相关的词条作为提示，非常朴素简单。作为一个搜索引擎，推荐的搜索词只是方便你用来进行进一步的搜索。</p>
+
+<ul>
+<li>京东（jd.com）
+<img src="media/15308021492726/15309730285264.jpg" alt=""/></li>
+</ul>
+
+<p>知名电商网站，可以看到，我们搜索 elastics 可以出现很多可能的商品名称以及多了一个对应的商品数，这样在点击搜索对应的推荐之前就知道那个关键字的商品数各是多少。</p>
+
+<ul>
+<li>Elastic（elastic.co）
+<img src="media/15308021492726/15309733636757.jpg" alt=""/></li>
+</ul>
+
+<p>Elastic 官方网站，同样搜索 Elastic 作为关键字，我们可以看到，推荐结果对关键字进行了字体加粗，并且推荐结果除了显示了推荐网页的标题，还显示了该网页的导航路径，这样对网页的大体分类可以有一个初步的了解。</p>
+
+<h2 id="toc_1">Typeahead 的使用</h2>
+
+<p>为了提高效率，不重复造轮子，我们选择一个成熟好用的搜索提示框架，由 Twitter 出品的 Typeahead.js。</p>
+
+<ul>
+<li>项目地址：<a href="https://typeahead.js.org/">https://typeahead.js.org/</a></li>
+<li>源码地址：<a href="https://github.com/twitter/typeahead.js">https://github.com/twitter/typeahead.js</a></li>
+</ul>
+
+<p>主要包含两个组件，Bloodhound 提示引擎和 UI View 渲染引擎，提示引擎主要用来根据给定查询来计算推荐结果，UI View 主要用来渲染推荐结果和处理 DOM 交互，两个组件可以分开使用，搭配起来就能实现强大的搜索提示功能：</p>
+
+<ul>
+<li>面向最终用户的即搜即得搜索提示</li>
+<li>用户输入时将第一个结果作为输入提示</li>
+<li>支持自定义模板来自定义 UI 界面</li>
+<li>RTL 语言的支持 and input method editors.</li>
+<li>Highlights query matches within the suggestion.</li>
+<li>Triggers custom events to encourage extensibility.</li>
+</ul>
+
+<p><img src="media/15308021492726/15310140979019.jpg" alt=""/></p>
+
+<h2 id="toc_2">Typeahead 基本使用</h2>
+
+<p>具体如何使用 Typeahead 呢，我们一起来看一下吧。</p>
+
+<p>打开项目主页（ <a href="https://github.com/twitter/typeahead.js">https://github.com/twitter/typeahead.js</a> ）可以看到有多个下载选择，我们选择 <a href="http://twitter.github.com/typeahead.js/releases/latest/typeahead.bundle.min.js">typeahead.bundle.min.js</a> ，这个是包含bloodhound.js 和 typeahead.jquery.js 且压缩过的包，只有 39KB 大小。</p>
+
+<p>Typeahead 需要依赖 jQuery 1.9+，我们先创建一个简单的静态页面，名为 index.html，下载好 jQuery 和 Typeahead 的 JS，目录如下：<br/>
+<img src="media/15308021492726/15310194861664.jpg" alt=""/></p>
+
+<p>打开 index.html，编辑内容为：</p>
+
+<pre><code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge,chrome=1&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+ 
+ &lt;div id=&quot;demo&quot;&gt;
+  &lt;input class=&quot;typeahead&quot; type=&quot;text&quot; placeholder=&quot;请输入关键字&quot;&gt;
+ &lt;/div&gt;
+
+&lt;script src=&quot;jquery.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;typeahead.bundle.min.js&quot;&gt;&lt;/script&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+//TODO  
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>上面是一个基本的 HTML 页面骨架，我们分别引入了 jQuery 和 Typeahead 的 JS 文件，同时添加了一个名为 <code>demo</code> 的 div 对象，里面有一个 input 对象作为输入框。</p>
+
+<p>我们继续编辑，替换上面的 //TODO 为具体的 Typeahead 调用脚本，我们这里使用了一个静态的数据源，并且通过正则匹配来判断是否匹配查询，代码内联注释如下：</p>
+
+<pre><code>//定义一个使用正则来匹配字符串的函数对象，参数是所有候选结果，返回包含关键字的结果集
+var substringMatcher = function(strs) {
+    
+  //具体的匹配函数定义
+  return function findMatches(q, cb) {
+    var matches, substringRegex;
+
+    //所有匹配的结果都会放在这个数组里面进行返回
+    matches = [];
+
+    //新建一个正则表达式对象，用来判断一个字符是不是包含关键字 `q`，第二个参数 `i` 表示忽略大小写
+    substrRegex = new RegExp(q, &#39;i&#39;);
+
+    //对传进来的 `strs` 数组进行迭代，依次用正则表达式来进行匹配，如果匹配成功，表示包含查询关键字 `q`，那么就添加到 `matches` 结果数组
+    $.each(strs, function(i, str) {
+      if (substrRegex.test(str)) {
+        matches.push(str);
+      }
+    });
+
+    //将匹配结果输出给回调函数
+    cb(matches);
+  };
+};
+
+//下面开始正式调用
+
+//所有搜索结果的候选词，静态数据
+var suggestions = [&#39;Elastic&#39;, &#39;Elasticsearch&#39;, &#39;Kibana&#39;, &#39;Logstash&#39;, &#39;Beats&#39;, &#39;Elastic社区&#39;];
+
+//绑定 #demo 对象，赋予 typeahead 的搜索提示行为
+$(&#39;#demo .typeahead&#39;).typeahead({
+  hint: true,
+  highlight: true,
+  minLength: 1
+},
+{
+  name: &#39;suggestions&#39;,
+  source: substringMatcher(suggestions)
+});
+</code></pre>
+
+<p>保存之后，我们打开浏览器，在网页的输入框里面输入关键字 <code>a</code>，就可以看到搜索提示的效果了，如下：</p>
+
+<p><img src="media/15308021492726/15310215219777.jpg" alt=""/></p>
+
+<p>看上去不错， 和我们期望的一样，不正是我们想要的实现的搜索提示功能么。</p>
+
+<p>不过，上面的数据源是我们硬编码的静态数据，我们的搜索结果应该是远程从 Elasticsearch 里面动态检索出来的才对呀。</p>
+
+<h2 id="toc_3">Typeahead 介绍</h2>
+
+<p>Typeahead 是如何获取数据源的呢，要回答这个问题，我们先从第一个组件 Typeahead 的 API 和概念说起。</p>
+
+<p>Typeahead 提供了以下 4 组 API：</p>
+
+<ul>
+<li>jQuery#typeahead(options, [*datasets])</li>
+<li>jQuery#typeahead(&#39;val&#39;, val)</li>
+<li>jQuery#typeahead(&#39;destroy&#39;)</li>
+<li>jQuery.fn.typeahead.noConflict()</li>
+</ul>
+
+<h3 id="toc_4">jQuery#typeahead(options, [*datasets])</h3>
+
+<p>对一个给定的文本输入框对象赋予 typeahead 的搜索提示能力。也就是初始化 Typeahead 的动作。</p>
+
+<p>我们看一个例子：</p>
+
+<pre><code>$(&#39;.typeahead&#39;).typeahead({
+  minLength: 3,
+  highlight: true
+},
+{
+  name: &#39;my-dataset&#39;,
+  source: mySource
+});
+</code></pre>
+
+<blockquote>
+<p><code>$(&#39;.typeahead&#39;)</code> 是 jQuery 的选择器，按照 CSS 名称来进行 dom 节点筛选，此处 CSS 名称为：typeahead</p>
+</blockquote>
+
+<h4 id="toc_5">options 参数用来配置相关参数</h4>
+
+<p>支持的完整参数列表如下：</p>
+
+<table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>highlight</td>
+<td>false</td>
+<td>当设置为 true 的时候，搜索结果渲染的时候，会将关键字包装上 strong 标签，并设置该标签的 css 样式名为 <code>{{classNames.highlight}}</code> </td>
+</tr>
+<tr>
+<td>hint</td>
+<td>true</td>
+<td>当设置为 false 的时候，输入框不会显示输入提示</td>
+</tr>
+<tr>
+<td>autoselect</td>
+<td>false</td>
+<td>当设置为 true 的时候，按回车键会默认选择第一个搜索提示结果用于搜索表单的提交</td>
+</tr>
+<tr>
+<td>minLength</td>
+<td>1</td>
+<td>用于搜索提示的最小的字符输入长度</td>
+</tr>
+<tr>
+<td>classNames</td>
+<td>无</td>
+<td>用于覆盖默认的 CSS 样式表</td>
+</tr>
+</tbody>
+</table>
+
+<p>CSS 样式表使用方式如下：</p>
+
+<pre><code>$(&#39;.typeahead&#39;).typeahead({
+  classNames: {
+    input: &#39;Typeahead-input&#39;,
+    hint: &#39;Typeahead-hint&#39;,
+    selectable: &#39;Typeahead-selectable&#39;
+  }
+});
+</code></pre>
+
+<p>完整的 CSS 的样式定义：</p>
+
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>input</td>
+<td>tt-input</td>
+<td>应用到 Typeahead 绑定的 input 对象</td>
+</tr>
+<tr>
+<td>hint</td>
+<td>tt-hint</td>
+<td>应用到出现输入提示的 input 对象</td>
+</tr>
+<tr>
+<td>menu</td>
+<td>tt-menu</td>
+<td>应用到显示搜索提示结果的菜单</td>
+</tr>
+<tr>
+<td>dataset</td>
+<td>tt-dataset</td>
+<td>应用到所有的数据集对象元素</td>
+</tr>
+<tr>
+<td>suggestion</td>
+<td>tt-suggestion</td>
+<td>应用到所有的搜索提示对象，每一条搜索提示记录</td>
+</tr>
+<tr>
+<td>empty</td>
+<td>tt-empty</td>
+<td>应用到搜索提示结果为空的提示菜单</td>
+</tr>
+<tr>
+<td>open</td>
+<td>tt-open</td>
+<td>应用到打开状态下的提示菜单</td>
+</tr>
+<tr>
+<td>cursor</td>
+<td>tt-cursor</td>
+<td>应用到光标移动到搜索结果上的样式</td>
+</tr>
+<tr>
+<td>highlight</td>
+<td>tt-highlight</td>
+<td>应用到包裹关键字的高亮对象</td>
+</tr>
+</tbody>
+</table>
+
+<p>举个 CSS 的定义例子：</p>
+
+<pre><code>&lt;style type=&quot;text/css&quot;&gt;
+    
+    .tt-hint{
+        color: yellow;
+    }
+
+    .tt-menu{
+        border: 1px solid blue;
+    }
+
+    .tt-dataset{
+        color: white;
+    }
+
+    .tt-suggestion{
+        background: #cccccc;
+    }
+
+    .tt-cursor{
+        background: gray;
+    }
+
+    .tt-highlight{
+        color: red;
+    }
+
+ &lt;/style&gt;
+</code></pre>
+
+<p>显示效果如下：<br/>
+<img src="media/15308021492726/15312775612822.jpg" alt=""/><br/>
+虽然很丑，但是可以看到，通过对上面这些 CSS 的自定义，我们就能完全控制搜索结果的展示，可以说是非常灵活强大。</p>
+
+<h4 id="toc_6">datasets 参数用来定义搜索提示的数据集来源</h4>
+
+<p>Typeahead 可以组合一个或者多个数据集，当用户的输入发生改变的时候，每一个数据集都会尝试渲染出新的搜索提示结果。</p>
+
+<p>大部分情况下一个数据集就够了，只有当你的结果需要根据目录关系进行分组或排序才需要用到多个数据集。</p>
+
+<p>datasets 支持以下参数来进行设置：</p>
+
+<table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>source</td>
+<td>无</td>
+<td>必填项，表示搜索提示的背后数据源，期待设置的是一个带有 <code>(query, syncResults, asyncResults)</code> 签名的函数，syncResults 用于同步操作下的结果调用，asyncResults 用于异步操作下的结果调用，如 AJAX 请求，source 还能是 Bloodhound 的一个实例。</td>
+</tr>
+<tr>
+<td>async</td>
+<td>无</td>
+<td>标识数据集是否异步，如果不设置，则取决于 source 参数的函数定义，如果source 对应的函数设置了第三个参数，则表示为异步。</td>
+</tr>
+<tr>
+<td>name</td>
+<td>随机数</td>
+<td>该数据集的名称，该名称会附加到 <code>{{classNames.dataset}}-</code> 作为一个 CSS 样式名称，用于自定义该数据集的 CSS 样式。</td>
+</tr>
+<tr>
+<td>limit</td>
+<td>5</td>
+<td>最多显示多少条搜索提示。</td>
+</tr>
+<tr>
+<td>display</td>
+<td>文本化</td>
+<td>对于一个给定的搜索结果对象，判断如何显示其内容的文本，用于当选中某条搜索提示结果之后，如何设置 input 输入框里面的文本值，可以是一个字符字段或者转换函数，默认是文本化函数。</td>
+</tr>
+<tr>
+<td>templates</td>
+<td>无</td>
+<td>用于渲染数据集结果的模板，模板是一个将 JavaScript 对象转换为 HTML 的函数，第一个参数为 JS 数据对象，返回 HTML 输出。</td>
+</tr>
+</tbody>
+</table>
+
+<p>关于 source 参数的使用，我们再回过头来看第一个例子：</p>
+
+<pre><code>  source: substringMatcher(suggestions),
+</code></pre>
+
+<p>source 指向的是一个字符匹配函数，通过正则表达式来对一个字符数组遍历，筛选匹配关键字的结果集。</p>
+
+<pre><code>var substringMatcher = function(strs) { 
+  return function findMatches(q, cb) {
+    ...
+    //match process
+    ...
+    cb(matches);
+  };
+};
+</code></pre>
+
+<p>上面的 <code>cb</code> 就是对应的 source 的第二个参数 <code>syncResults</code>，即用于同步结果的回调。是不是清楚多了。</p>
+
+<p>我们再看看关于 templates 的使用，我们有以下选项：</p>
+
+<table>
+<thead>
+<tr>
+<th>模板名</th>
+<th>使用条件</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>notFound</td>
+<td>当某个查询返回 0 个搜索结果</td>
+<td>可以设置为一个 HTML 字符串或是一个模板函数，模板函数参数包含 <code>query</code> 表示查询条件。</td>
+</tr>
+<tr>
+<td>pending</td>
+<td>当 0 个同步结果返回，但是有异步请求还在后台运行时</td>
+<td>可以设置为一个 HTML 字符串或是一个模板函数，模板函数参数包含 <code>query</code> 表示查询条件。</td>
+</tr>
+<tr>
+<td>header</td>
+<td>当搜索结果展现时</td>
+<td>显示在搜索结果顶部的内容，可以设置为一个 HTML 字符串或是一个模板函数，模板函数参数包含 <code>query</code> 表示查询条件和 <code>suggestions</code> 表示搜索结果。</td>
+</tr>
+<tr>
+<td>footer</td>
+<td>当搜索结果展现时</td>
+<td>显示在搜索结果底部的内容，可以设置为一个 HTML 字符串或是一个模板函数，模板函数参数包含 <code>query</code> 表示查询条件和 <code>suggestions</code> 表示搜索结果。</td>
+</tr>
+<tr>
+<td>suggestion</td>
+<td>渲染单条搜索结果时</td>
+<td>如果设置，只能是模板函数，相关的搜索提示对象会作为函数参数传递，默认会将 <code>display</code> 的值包含在一个 div 标签内，即 <code>&lt;div&gt;{{value}}&lt;/div&gt;</code>。</td>
+</tr>
+</tbody>
+</table>
+
+<p>我们设置一个 notFound 模板如下:</p>
+
+<pre><code>$(&#39;#demo .typeahead&#39;).typeahead({
+  hint: true,
+  highlight: true
+},
+{
+  name: &#39;suggestions&#39;,
+  source: substringMatcher(suggestions),
+  &quot;templates&quot;:{
+    &quot;notFound&quot;:function(context){ return &quot;&lt;span class=tt-empty&gt;Nothing Found!&lt;/span&gt;&quot; }
+  }
+});
+</code></pre>
+
+<p>当输入一个不存在结果的查询条件，即可获得如下效果:<br/>
+<img src="media/15308021492726/15312789307826.jpg" alt=""/></p>
+
+<p>然后我们再试着自定义一下搜索结果的展示，加上头部和底部的信息：</p>
+
+<pre><code>&quot;templates&quot;:{
+    &quot;notFound&quot;:function(context){ return &quot;&lt;span class=tt-empty&gt;Nothing Found for query: &quot;+context.query+&quot;!&lt;/span&gt;&quot; },
+    &quot;header&quot;:&quot;&lt;span style=font-size:12px;&gt;My suggestion:&lt;/span&gt;&quot;,
+    &quot;footer&quot;:&quot;&lt;span style=font-size:10px;&gt;Copyright 2018 &amp;copy;&lt;/span&gt;&quot;,
+    &quot;suggestion&quot;:function(context){ return &quot;&lt;div&gt;&quot;+context+&quot;!&lt;/div&gt;&quot; },
+    }
+</code></pre>
+
+<p>效果如下：<br/>
+<img src="media/15308021492726/15312802129445.jpg" alt=""/></p>
+
+<p>通过用模板来控制搜索提示结果的展示。再结合自定义的 CSS 样式，我们就可以实现任何想要的搜索结果展示了。</p>
+
+<h3 id="toc_7">jQuery#typeahead(&#39;val&#39;, val)</h3>
+
+<p>动态设置输入框的输入文本值。</p>
+
+<pre><code>var myVal= &quot;your keyword&quot;;
+$(&#39;.typeahead&#39;).typeahead(&#39;val&#39;, myVal);
+</code></pre>
+
+<h3 id="toc_8">jQuery#typeahead(&#39;open&#39;)</h3>
+
+<p>手动打开搜索提示结果菜单。</p>
+
+<pre><code>$(&#39;.typeahead&#39;).typeahead(&#39;open&#39;);
+</code></pre>
+
+<h3 id="toc_9">jQuery#typeahead(&#39;close&#39;)</h3>
+
+<p>手动关闭搜索提示结果菜单。</p>
+
+<pre><code>$(&#39;.typeahead&#39;).typeahead(&#39;close&#39;);
+</code></pre>
+
+<h3 id="toc_10">jQuery#typeahead(&#39;destroy&#39;)</h3>
+
+<p>移除 typeahead 功能，恢复默认的 input 状态。</p>
+
+<pre><code>$(&#39;.typeahead&#39;).typeahead(&#39;destroy&#39;);
+</code></pre>
+
+<h3 id="toc_11">jQuery.fn.typeahead.noConflict()</h3>
+
+<p>返回一个 Typeahead 插件引用，并恢复 jQuery.fn.typeahead 到上一个值。用于重新定义 Typeahead 的方法名，用来避免命名冲突。</p>
+
+<pre><code>var typeahead = jQuery.fn.typeahead.noConflict();
+jQuery.fn._typeahead = typeahead;
+</code></pre>
+
+<p>执行上面的代码后，就可以在代码里面使用 <code>_typeahead</code> 来代替 <code>typeahead</code> 来进行调用了。</p>
+
+<h2 id="toc_12">Bloodhound 介绍</h2>
+
+<p>接下来再看一下 Typeahead 的另外一个组件 Bloodhound 的使用。<br/>
+Bloodhound 是 typeahead.js 的提示引擎，提供了很多高级的特性比如：</p>
+
+<ul>
+<li>支持硬编码的静态数据</li>
+<li>通过数据预取来降低延迟</li>
+<li>使用本地存储来智能的减少网络请求</li>
+<li>支持远程数据回填到本地</li>
+<li>通过限速和缓存网络请求来降低远端负载</li>
+</ul>
+
+<p>主要提供了以下几组 API：</p>
+
+<ul>
+<li>new Bloodhound(options)</li>
+<li>Bloodhound.noConflict()</li>
+<li>Bloodhound#initialize(reinitialize)</li>
+<li>Bloodhound#add(data)</li>
+<li>Bloodhound#get(ids)</li>
+<li>Bloodhound#search(query, sync, async)</li>
+<li>Bloodhound#clear()</li>
+</ul>
+
+<h3 id="toc_13">new Bloodhound(options)</h3>
+
+<p>Bloodhound 的构造函数，我们使用的时候，需要构造出一个 Bloodhound 的实例来使用。</p>
+
+<p>示例如下:</p>
+
+<pre><code>var engine = new Bloodhound({
+  local: [&#39;dog&#39;, &#39;pig&#39;, &#39;moose&#39;],
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  datumTokenizer: Bloodhound.tokenizers.whitespace
+});
+</code></pre>
+
+<p>可以看到在 Bloodhound 初始化的时候，支持传入一个参数对象，支持的选项及说明如下：</p>
+
+<table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>datumTokenizer</td>
+<td></td>
+<td>必填项，数据分词器，设置为包含一个参数的函数 <code>(datum)</code>，用于将该传入参数的数据转换成数组列表</td>
+</tr>
+<tr>
+<td>queryTokenizer</td>
+<td></td>
+<td>必填项，查询分词器，设置为一个包含参数的函数 <code>(query)</code>，用于将该传入参数的数据转换成数组列表</td>
+</tr>
+<tr>
+<td>initialize</td>
+<td>true</td>
+<td>当设置为 false 的时候，Bloodhound 需要显式设置初始化状态</td>
+</tr>
+<tr>
+<td>identify</td>
+<td><code>JSON.stringify</code></td>
+<td>可设置一个函数，对于一个给定的数据对象，返回一个能够标识该对象的唯一标识，默认是 <code>JSON.stringify</code> 函数。强烈建议自定义此函数。</td>
+</tr>
+<tr>
+<td>sufficient</td>
+<td>5</td>
+<td>表示足够的数据结果，当从内部索引拿到的数据集不足该数值时，会通过调用 <code>#search</code> 函数来尝试从 <code>remote</code> 数据源回填数据，</td>
+</tr>
+<tr>
+<td>sorter</td>
+<td></td>
+<td>设置一个排序函数来对结果进行排序。</td>
+</tr>
+<tr>
+<td>local</td>
+<td></td>
+<td>可以设置为一个数组或者一个返回数组的函数，在调用 <code>#initialize</code> 函数的时候添加到本地索引中。</td>
+</tr>
+<tr>
+<td>prefetch</td>
+<td></td>
+<td>可以设置一个包含数组的 URL 或 JSON 文件地址，支持若干配置参数。</td>
+</tr>
+<tr>
+<td>remote</td>
+<td></td>
+<td>可以设置为一个 URL 地址用来当本地索引数据不够时从远程获取更多数据。支持若干配置参数。</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="toc_14">Prefech 参数用于初始化的时候获取数据</h4>
+
+<p>如果浏览器支持本地存储，如 Chrome，则数据会被缓存在本地以避免后续页面额外的网络开销，由于一般来说，我们的本地存储空间受限于浏览器，我们应加速这个只是一个最前端的一级缓存，也不应包含太多的数据，不过对于我们缓存一些用户常见的数据应该足够了，比如用户最近的查询历史，用户经常访问的数据等。</p>
+
+<p>Prefetch 参数支持的配置选项：</p>
+
+<table>
+<thead>
+<tr>
+<th>参数名</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>url</td>
+<td></td>
+<td>必填项，用于加载数据的 URL 地址。</td>
+</tr>
+<tr>
+<td>cache</td>
+<td>true</td>
+<td>设置成 false 则不会走本地缓存。</td>
+</tr>
+<tr>
+<td>ttl</td>
+<td>86400000（1天）</td>
+<td>缓存数据的过期时间，默认1天，单位毫秒。</td>
+</tr>
+<tr>
+<td>cacheKey</td>
+<td>url</td>
+<td>用于保存本地缓存的 key，默认就是 URL。</td>
+</tr>
+<tr>
+<td>thumbprint</td>
+<td></td>
+<td>数据指纹，用于判断本地数据是否和远程数据是否一致，如果不一致，会重新获取远程数据。</td>
+</tr>
+<tr>
+<td>prepare</td>
+<td>identify</td>
+<td>在正式发送远程加载请求之前，用于处理请求参数的函数。包含签名 <code>prepare(settings)</code>, 返回的也是 <code>settings</code>。默认是 identify 参数的函数定义。</td>
+</tr>
+<tr>
+<td>transform</td>
+<td>identify</td>
+<td>用于转换请求返回数据的函数，要求包含签名 <code>transform(response)</code>。默认是 identify 参数的函数定义。</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="toc_15">Remote 参数用于从远端获取额外的数据</h4>
+
+<p>为了避免对远端服务器产生过度的请求，remote 的请求是限速过的。</p>
+
+<p>Remote 参数支持的配置选项：</p>
+
+<table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>url</td>
+<td></td>
+<td>必填项，请求的 URL 地址。</td>
+</tr>
+<tr>
+<td>prepare</td>
+<td>identify</td>
+<td>同 prefetch，用于请求前的参数干预。函数签名为 <code>prepare(query, settings)</code>，第一个 query 参数值为 <code>#search</code> 查询，第二个 settings 为 Bloodhound 所内部创建。默认是 identify 参数的函数定义。</td>
+</tr>
+<tr>
+<td>wildcard</td>
+<td></td>
+<td>设置一个通配符表示，用于 prepare 方法的使用</td>
+</tr>
+<tr>
+<td>rateLimitBy</td>
+<td>debounce</td>
+<td>用于网络限速的方法，支持 <code>debounce</code> 和 <code>throttle</code></td>
+</tr>
+<tr>
+<td>rateLimitWait</td>
+<td>300</td>
+<td>用于参数 <code>rateLimitBy</code> 使用的时间间隔，单位毫秒。</td>
+</tr>
+<tr>
+<td>transform</td>
+<td>identify</td>
+<td>用于转换请求返回数据的函数，要求包含签名 <code>transform(response)</code>。默认是 identify 参数的函数定义。</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code> var result = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace(&#39;value&#39;),
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      remote: {
+        url: &#39;/search/suggest?q=%QUERY&#39;,
+        wildcard: &#39;%QUERY&#39;
+      }
+    });
+</code></pre>
+
+<h3 id="toc_16">Bloodhound.noConflict()</h3>
+
+<p>返回新的实例，用于避免命名冲突。</p>
+
+<pre><code>var Dachshund = Bloodhound.noConflict();
+</code></pre>
+
+<h3 id="toc_17">Bloodhound#initialize(reinitialize)</h3>
+
+<p>用于手动初始化对象。准备数据，添加索引以及各项初始化操作。在没有初始化之前，<code>#get</code> 和 <code>#search</code> 是没有办法操作的。除非 <code>initialize</code> 被设置成 <code>false</code>，否则在构造函数里面是会自动调用的。</p>
+
+<h3 id="toc_18">Bloodhound#add(data)</h3>
+
+<p>用于接收一个数组对象作为参数，然后添加到本地的内部索引中。</p>
+
+<pre><code>engine.add([{ val: &#39;one&#39; }, { val: &#39;two&#39; }]);
+</code></pre>
+
+<h3 id="toc_19">Bloodhound#get(ids)</h3>
+
+<p>通过 ID 从本地索引返回数据。</p>
+
+<pre><code>var engine = new Bloodhound({
+    local: [{ id: 1, name: &#39;dog&#39; }, { id: 2, name: &#39;pig&#39; }],
+    identify: function(obj) { return obj.id; },
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    datumTokenizer: Bloodhound.tokenizers.whitespace
+  });
+
+  engine.get([1, 3]); // [{ id: 1, name: &#39;dog&#39; }, null]
+</code></pre>
+
+<h3 id="toc_20">Bloodhound#search(query, sync, async)</h3>
+
+<p>返回包含 <code>query</code> 查询的数据，本地索引找到的数据会被返回到 <code>sync</code> 结果中，如果本地返回的数据不够数，会构建 <code>remote</code> 请求，该请求的结果响应会通过 <code>async</code> 返回。</p>
+
+<pre><code>bloodhound.get(myQuery, sync, async);
+
+function sync(datums) {
+  console.log(&#39;datums from `local`, `prefetch`, and `#add`&#39;);
+  console.log(datums);
+}
+
+function async(datums) {
+  console.log(&#39;datums from `remote`&#39;);
+  console.log(datums);
+}
+</code></pre>
+
+<h3 id="toc_21">Bloodhound#clear()</h3>
+
+<p>清理本地内部索引。</p>
+
+<h2 id="toc_22">Typeahead 功能集成</h2>
+
+<p>上面介绍了 Typeahead 的基本功能，知道了 Typeahead 支持两种方式来从远程获取数据：Prefetch 和 Remote。</p>
+
+<p>我们可以将小部分静态数据整理成 JSON 格式，然后通过 API 暴露出来，再通过 Prefetch 加装到本地。对于常见的查询需求，比如热门搜索、推荐搜索词等，可以快速得到结果，大大提升用户体验。</p>
+
+<p>而对于其他的查询请求，我们可以构造一个请求发送给后端的 PHP 接口，PHP 接口再去请求 Elasticsearch 进行查询，然后将返回结果交给 Typeahead 封装显示在搜索提示结果列表。</p>
+
+<h3 id="toc_23">加载本地数据</h3>
+
+<p>我们这节主要用来实现热门搜索、推荐搜索词的搜索。</p>
+
+<p>我们基于前面的演示页面进行修改，我们先定义一个包含搜索热词 JSON 对象数组的文件 <code>top_search.json</code>，内容如下：</p>
+
+<pre><code>[{
+  &quot;keyword&quot;:&quot;Elastic 官网&quot;,
+  &quot;url&quot;:&quot;https://elastic.co&quot;
+},{
+  &quot;keyword&quot;:&quot;Elastic 中文社区&quot;,
+  &quot;url&quot;:&quot;https://elastic.co&quot;
+},{
+  &quot;keyword&quot;:&quot;Elastic 源码 @Github&quot;,
+  &quot;url&quot;:&quot;https://github.com/elastic&quot;
+},{
+  &quot;keyword&quot;:&quot;Elastic Stack 下载&quot;,
+  &quot;url&quot;:&quot;https://www.elastic.co/downloads&quot;
+},{
+  &quot;keyword&quot;:&quot;Elasticsearch 下载&quot;,
+  &quot;url&quot;:&quot;https://www.elastic.co/downloads/elasticsearch&quot;
+},{
+  &quot;keyword&quot;:&quot;Elastic 英文社区&quot;,
+  &quot;url&quot;:&quot;https://discuss.elastic.co&quot;
+}]
+</code></pre>
+
+<p>目录结构如下：<br/>
+<img src="media/15308021492726/15313673860920.jpg" alt=""/></p>
+
+<p>然后我们编辑 <code>index.html</code>，修改其中的脚本部分：</p>
+
+<pre><code>&lt;script type=&quot;text/javascript&quot;&gt;
+
+//定义一个 Prefech 的 Bloodhound 实例，数据来源为一个 json 文件
+ var topSearch = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace(&#39;keyword&#39;),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        prefetch: &#39;top_search.json&#39;
+});
+
+
+//绑定 #demo 对象，赋予 typeahead 的搜索提示行为
+$(&#39;#demo .typeahead&#39;).typeahead({
+  hint: true,
+  highlight: true,
+  minLength: 1,
+  autoselect: false
+},
+{
+  name: &#39;topSearch&#39;,
+  displayKey: &#39;keyword&#39;,
+  source: topSearch,
+  &quot;templates&quot;:{
+    &quot;notFound&quot;:function(context){ return &quot;&lt;span class=tt-empty&gt;Nothing Found for query: &quot;+context.query+&quot;!&lt;/span&gt;&quot; },
+    &quot;header&quot;:&quot;&lt;span style=font-size:12px;&gt;My suggestion:&lt;/span&gt;&quot;,
+    &quot;footer&quot;:&quot;&lt;span style=font-size:10px;&gt;Copyright 2018 &amp;copy;&lt;/span&gt;&quot;,
+    &quot;suggestion&quot;:function(context){ return &quot;&lt;div&gt;&quot;+context+&quot;!&lt;/div&gt;&quot; },
+
+  }
+});
+
+&lt;/script&gt;
+</code></pre>
+
+<p>我们在该目录运行一个命令来启动一个简单的 HTTP 服务器:</p>
+
+<pre><code>python -m SimpleHTTPServer 9080
+</code></pre>
+
+<p>使用浏览器打开 <code>http://localhost:9080</code>，然后就会出现我们熟悉的输入框，我们输入 <code>el</code>，效果如下:<br/>
+<img src="media/15308021492726/15313677782693.jpg" alt=""/><br/>
+可以看到，有5条搜索结果，不过怎么显示都是 <code>object</code> 啊，恩，原来是模板还没有修改，搜索结果不是一个字符串，而是一个对象，我们需要明确要操作的具体字段，修改如下：</p>
+
+<pre><code>&quot;templates&quot;:{
+    &quot;notFound&quot;:function(context){ return &quot;&lt;span class=tt-empty&gt;Nothing Found for query: &quot;+context.query+&quot;!&lt;/span&gt;&quot; },
+    &quot;header&quot;:&quot;&lt;span style=font-size:12px;&gt;My suggestion:&lt;/span&gt;&quot;,
+    &quot;footer&quot;:&quot;&lt;span style=font-size:10px;&gt;Copyright 2018 &amp;copy;&lt;/span&gt;&quot;,
+    &quot;suggestion&quot;:function(context){ return &#39;&lt;div&gt;&#39;+context.keyword+&#39;!&lt;br/&gt;&lt;span style=font-size=2px&gt;&lt;a href=&quot;&quot;&#39;+context[&quot;url&quot;]+&#39;&quot; &gt;&#39;+context.url+&#39;&lt;/a&gt;&lt;/span&gt;&lt;/div&gt;&#39; }
+  }
+</code></pre>
+
+<p>更新后的效果如下：<br/>
+<img src="media/15308021492726/15313681942937.jpg" alt=""/></p>
+
+<p>是不是很赞?</p>
+
+<p>我们不仅从远程下载了特定的数据集，而且还自定义了展现样式，加上了链接可以点击前往搜索结果对应的 URL 地址，你甚至还可以加上标签、时间、目录、图片等属性来丰富展现效果。</p>
+
+<h3 id="toc_24">获取远程数据</h3>
+
+<p>我们同样在目录新建一个 <code>source.json</code> 的数据文件：</p>
+
+<pre><code>[{
+  &quot;keyword&quot;:&quot;Elastic 官网[From Source]&quot;,
+  &quot;url&quot;:&quot;https://elastic.co&quot;
+},{
+  &quot;keyword&quot;:&quot;Elastic 中文社区[From Source]&quot;,
+  &quot;url&quot;:&quot;https://elastic.co&quot;
+}
+...
+]
+</code></pre>
+
+<p>编辑 index.html 文件，修改脚本，新增一个 remote 配置:</p>
+
+<pre><code> var topSearch = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace(&#39;keyword&#39;),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        prefetch: &#39;top_search.json&#39;,
+        remote: &#39;remote.json&#39;
+});
+</code></pre>
+
+<p>重新打开浏览器测试输入：<code>elastic s</code> 搜索：<br/>
+<img src="media/15308021492726/15314001057702.jpg" alt=""/></p>
+
+<p>可以看到输入 <code>elastic</code> 的时候，都是走的本地缓存，中间输入字符的时候，并没有产生额外的网络请求，只有当输入到 <code>s</code> 的时候，候选结果不足5个，这个时候才开始访问 remote 的数据源，完美！</p>
+
+<h3 id="toc_25">与社区网站的集成</h3>
+
+<p>这一节开始讨论怎么改造社区网站了，社区网站是 PHP 写的，用的是 MVC 的架构。</p>
+
+<p>首先，我们将 typeahead.bundle.min.js 文件拷贝到网站的静态资源目录：/static/js/typeahead.bundle.min.js</p>
+
+<p>然后打开模板文件：/views/default/global/header.tpl.htm，找到搜索表单所在的位置，在14行和29行之间，如下图:<br/>
+<img src="media/15308021492726/15314026458169.jpg" alt=""/></p>
+
+<p>为了尽量减少对原系统的侵入，我们不直接修改原搜索功能，而是采取功能替换的方式来进行。</p>
+
+<p>我们这里加上一个开关来进行判断，为方便测试，我们设置为 false，即每次都是走新的搜索，后续可以改成动态配置来切换开关，如下图：</p>
+
+<p><img src="media/15308021492726/15314031543489.jpg" alt=""/></p>
+
+<p>然后我们在 //TODO 的位置引入我们新的 js 文件和加上之前的测试代码，如下图：</p>
+
+<p><img src="media/15308021492726/15314030970486.jpg" alt=""/></p>
+
+<p>把两个 json 文件拷贝到网站的根目录，然后就可以打开网站测试一下搜索的集成效果了，如下图：</p>
+
+<p><img src="media/15308021492726/15314033472906.jpg" alt=""/></p>
+
+<p>简直完美，额，暂时把样式的问题忽略一下，后期可以再一起美化😊。</p>
+
+<h3 id="toc_26">与 Elasticsearch 的集成</h3>
+
+<p>接下来要做的就是提供一个 API 来替换掉固定的 remote.json 数据源，使用来自 Elasticsearch 的数据。</p>
+
+<p>我们打开文件：/app/search/ajax.php，新增一个帮助函数 <code>post</code>，用于发送 RESTful 请求。</p>
+
+<pre><code>public function post($url,$queryDSL){
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        $data_string=$queryDSL;
+
+        $data_string= str_replace(&#39;\\r\\n&#39;,&quot;&quot;,$data_string);
+        $data_string= str_replace(&#39;\r\n&#39;,&quot;&quot;,$data_string);
+        $data_string= str_replace(&#39;\\r&#39;,&quot;&quot;,$data_string);
+        $data_string= str_replace(&#39;\r&#39;,&quot;&quot;,$data_string);
+        $data_string= str_replace(&#39;\n&#39;,&quot;&quot;,$data_string);
+        $data_string= str_replace(&#39;\\n&#39;,&quot;&quot;,$data_string);
+
+//          $username = &quot;elastic&quot;;
+//          $password = &quot;changeme&quot;;
+//          if(isset($username)&amp;&amp;isset($password)){
+//              curl_setopt($ch, CURLOPT_USERPWD, $username . &quot;:&quot; . $password);
+//          }
+
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                &#39;Content-Type: application/json; charset=utf-8&#39;,
+                &#39;Content-Length: &#39; . strlen($data_string))
+        );
+        ob_start();
+        $json=curl_exec($ch);
+        $return_content =$json;
+        ob_end_clean();
+
+        //如果请求执行成功会返回200的状态码，则返回响应结果
+        $return_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        if($return_code==200){
+            return$return_content;
+        }
+
+        return null;
+    }
+</code></pre>
+
+<p>然后再新建一个名为 <code>suggest_action</code> 的函数用来处理封装 Elasticsearch 的查询请求，如下：</p>
+
+<pre><code>    public function suggest_action(){
+
+        //获取请求参数，参数名为 q
+        $keyword=$_GET[&#39;q&#39;];
+
+        //固定的搜索地址，来自索引 forum-mysql
+        $url=&quot;http://localhost:9200/forum-mysql/_search&quot;;
+
+        //封装 QueryDSL 查询，过滤返回字段
+        $dsl=&#39;{
+          &quot;query&quot;: {
+            &quot;match&quot;: {
+              &quot;title&quot;: &quot;&#39;.$keyword.&#39;&quot;
+            }
+          },&quot;_source&quot;: [&quot;title&quot;,&quot;id&quot;,&quot;uid&quot;,&quot;views&quot;]
+        }&#39;;
+
+        //执行 HTTP 请求，发送给 ES
+        $response=self::post($url,$dsl);
+
+        if($response!=null){
+
+            $result=array();
+            $o=json_decode($response,true);
+            if(isset($o[&quot;hits&quot;][&quot;hits&quot;])){
+                foreach ($o[&quot;hits&quot;][&quot;hits&quot;] as $v){
+                    //重新封装字段名称，符合搜索提示的结果规范
+                    $x[&quot;keyword&quot;]=$v[&quot;_source&quot;][&quot;title&quot;];
+                    //根据文章的 ID 来拼接文章的 URL
+                    $x[&quot;url&quot;]=&quot;/article/&quot;.$v[&quot;_source&quot;][&quot;id&quot;];
+                    //放入到结果数组
+                    array_push($result,$x);
+                }
+            }
+
+            //生成 JSON 格式，输出
+            echo json_encode($result);
+        }
+    }
+</code></pre>
+
+<p>现在我们打开浏览器，访问该接口地址：<code>http://localhost:8080/search/ajax/suggest/?q=beats</code>，应该就能看到来自 Elasticsearch 的数据了：</p>
+
+<p><img src="media/15308021492726/15314097220517.jpg" alt=""/></p>
+
+<p>因为我们请求的地址已经变化，并且要根据每次输入的关键字自动拼接请求串，所以还需要修改 Typeahead 的调用代码，打开 <code>/views/default/global/header.tpl.htm</code> 修改如下：</p>
+
+<pre><code>var topSearch = new Bloodhound({
+                    datumTokenizer: Bloodhound.tokenizers.obj.whitespace(&#39;keyword&#39;),
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    prefetch: &#39;top_search.json&#39;,
+                    remote:   {
+                        url: &#39;/search/ajax/suggest/?q=%QUERY&#39;,
+                        wildcard: &#39;%QUERY&#39;
+                }
+                });
+</code></pre>
+
+<p>保存更新，再次打开浏览器，我们点击搜索框，输入关键字，就能出现来自真实数据的搜索提示了：</p>
+
+<p><img src="media/15308021492726/15314108350459.jpg" alt=""/></p>
+
+<p>大功告成。</p>
+
+<h2 id="toc_27">小知识</h2>
+
+<h3 id="toc_28">什么是 AJAX？</h3>
+
+<p>AJAX = 异步 JavaScript 和 XML。</p>
+
+<p>AJAX 是一种在无需重新加载整个网页的情况下，能够更新部分网页的技术。</p>
+
+<p>通过在后台与服务器进行少量数据交换，AJAX 可以使网页实现异步更新。这意味着可以在不重新加载整个网页的情况下，对网页的某部分进行更新。</p>
+
+<p>而传统的网页（不使用 AJAX）如果需要更新内容，必需重载整个网页面。</p>
+
+
+</div>
+
+<br /><br />
+<hr />
+
+<div class="row clearfix">
+  <div style="width:50%;float:left;padding-left: 15px;">
+	<div class="text-left" style="padding:15px 0px;">
+		
+	        <a href="3.6_data_migration.html"  title="Previous Post: 数据迁移">&laquo; 数据迁移</a>
+	    
+	</div>
+  </div>
+  <div style="width:50%;float:right;padding-right: 15px;">
+	<div class="text-right" style="padding:15px 0px;">
+		
+	</div>
+  </div>
+</div>
+
+<div class="row">
+<div style="padding:0px 0.93em;" class="share-comments">
+<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://elastic-sou-suo-kai-fa-shi-zhan.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                            
+
+</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		var currentURL = '3.7_autocomplete.html';
+		$('#side-nav a').each(function(){
+			if($(this).attr('href') == currentURL){
+				$(this).parent().addClass('active');
+			}
+		});
+	});
+</script>
+
+<!-- toc -->
+<script src="asset/js/jquery.ztree.all-3.5.min.js?v=4?v=20151125" type="text/javascript"></script>
+<script src="asset/js/ztree_toc.js?v=4?v=20151125" type="text/javascript"></script>
+<SCRIPT type="text/javascript" >
+  <!--
+  $(document).ready(function(){
+    $('#tree').ztree_toc({
+      is_auto_number:true
+    });
+  });
+  //-->
+  </SCRIPT>
+  <!-- toc -->
+
+  
+</div></div>
+
+
+<div class="page-bottom">
+  <div class="row">
+  <hr />
+  <div class="small-9 columns">
+  <p class="copyright">Copyright &copy; 2018 <a target="_blank" href="http://medcl.com">Medcl</a>. 未经许可,谢绝转载.</p>
+  </div>
+  <div class="small-3 columns">
+  <p class="copyright text-right"><a href="#header">TOP</a></p>
+  </div>
+   
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+    
+    
+    <script src="asset/js/foundation.min.js"></script>
+    <script src="asset/js/foundation/foundation.offcanvas.js"></script>
+    
+<!-- UserVoice JavaScript SDK (only needed once on a page) -->
+<script>(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='http://widget.uservoice.com/c1PjjxGIoKy3HUGvYKodbA.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})()</script>
+
+<!-- A tab to launch the Classic Widget -->
+<script>
+UserVoice = window.UserVoice || [];
+UserVoice.push(['showTab', 'classic_widget', {
+  mode: 'feedback',
+  primary_color: '#fa8c28',
+  link_color: '#0a8cc6',
+  forum_id: 53824,
+  support_tab_name: '联系我',
+  feedback_tab_name: '给予反馈',
+  tab_label: '意见反馈',
+  tab_color: '#2369d9',
+  tab_position: 'middle-right',
+  tab_inverted: false
+}]);
+</script>
+
+
+    <script>
+      $(document).foundation();
+
+     
+    </script>
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script id="dsq-count-scr" src="//elastic-sou-suo-kai-fa-shi-zhan.disqus.com/count.js" async></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-120597990-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-120597990-1');
+    </script>
+  </body>
+</html>
