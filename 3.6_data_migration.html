@@ -16,6 +16,15 @@
     <script src="asset/js/vendor/modernizr.js"></script>
     <script src="asset/js/vendor/jquery.js"></script>
     <script src="asset/highlightjs/highlight.pack.js"></script>
+    
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: "ca-pub-9516277730901843",
+          enable_page_level_ads: true
+     });
+</script>
+
     <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
     <script>hljs.initHighlightingOnLoad();</script>
     
@@ -130,6 +139,10 @@
           
               
                 <li class="sub_nav"><a title="搜索提示" href="3.7_autocomplete.html">搜索提示</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="搜索模板" href="15486660133014.html">搜索模板</a></li>
               
           
 
@@ -274,6 +287,12 @@
 
                         
 
+                        
+                          <li><a title="搜索模板" href="15486660133014.html">搜索模板</a></li>
+                                      
+
+                        
+
                     
                   </ul>
                 </nav>
@@ -368,8 +387,28 @@ output {
 
 <p>请尝试使用 JDK 8 来运行 Logstash。</p></li>
 <li><p>Tip 2，Logstash 配置文件里面的statement 参数设置的 SQL 字符串末尾不要加上 <code>;</code>，否则会报错。</p></li>
+<li><p>Tip 3，如果执行一段时间遇到 Logstash 异常退出且出现以下信息：</p></li>
 </ul>
 
+<pre><code class="language-js">[2019-01-29T09:27:52,900][ERROR][org.logstash.Logstash    ] java.lang.IllegalStateException: Logstash stopped processing because of an error: (NoMethodError) undefined method `&lt;&#39; for nil:NilClass
+</code></pre>
+
+<pre><code class="language-js">[2019-01-29T09:45:02,377][FATAL][logstash.runner          ] An unexpected error occurred! {:error=&gt;#&lt;NoMethodError: undefined method `&lt;&#39; for nil:NilClass&gt;, :backtrace=&gt;
+</code></pre>
+
+<p>都有可能是 Elasticsearch 服务器不可用造成的。</p>
+
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-9516277730901843"
+     data-ad-slot="5015120160"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
 
 </div>
 
@@ -470,7 +509,7 @@ s.setAttribute('data-timestamp', +new Date());
     
     <script src="asset/js/foundation.min.js"></script>
     <script src="asset/js/foundation/foundation.offcanvas.js"></script>
-    
+
 <!-- UserVoice JavaScript SDK (only needed once on a page) -->
 <script>(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='http://widget.uservoice.com/c1PjjxGIoKy3HUGvYKodbA.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})()</script>
 

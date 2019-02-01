@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  任务介绍 - Elastic 搜索开发实战
+  搜索模板 - Elastic 搜索开发实战
   
   </title>
  <meta name="description" content="Elastic 搜索开发实战，图书">
@@ -309,59 +309,112 @@
 <!-- end toc -->
 
 <div class="markdown-body">
-<h1>任务介绍</h1>
+<h1>搜索模板</h1>
 
-<p>我们的目标网站是我们的 Elastic 中文社区：<a href="http://elasticsearch.cn">http://elasticsearch.cn</a>，为什么我们要改造其站内搜索功能呢？我们先来看下面的一张截图：</p>
+<p>本节我们主要讨论怎么优化查询的构造方式，前面章节提到我们的一个 QueryDSL 是一个复杂的 JSON，我们每次在构造查询的时候，都需要进行各种参数的处理，然后再拼接出最终的 QueryDSL，首先是处理逻辑会变得很复杂，需要处理每种参数赋值与否的各种场景，最头疼的是，每次加参数的时候，都需要重新修改拼装逻辑，实在是头痛，那么有没有一种简洁优雅的方法来处理查询的构建呢。</p>
 
-<p><img src="media/15285964747097/15285983964703.jpg" alt=""/></p>
+<p>答案自然是有的，那就是使用搜索模板（search_template），具体怎么使用呢？我们一起来看一下。</p>
 
-<p>我们搜索的关键字是 <code>Elastic 搜开发实战</code>，可以看到智能提示框，里面的推荐结果貌似有点糟糕，有些结果看上去完全没有体现出和关键字有什么关系，感觉搜了之后还是找不到有用的东西。我们再看一个。</p>
+<h2 id="toc_0">将查询和参数分离</h2>
 
-<p><img src="media/15285964747097/15285987753533.jpg" alt=""/></p>
+<p>Elasticsearch 里面的 <a href="https://www.elastic.co/guide/en/elasticsearch/reference/6.6/search-template.html">Search Template</a> 允许我们提前定义好一个查询的模板，并且通过参数的方式来接受外部传进来的变量，然后借助 Elasticsearch 内置的 Mustache 脚本引擎来进行渲染，从而得到最终的 QueryDSL，借助搜索模板，我们从而进行查询条件和具体查询语句的分离解耦。</p>
 
-<p>将一篇日报的完整标题作为关键字搜索，在搜索结果里面，居然不是排在第一位的。</p>
+<p>先来看一个简单的通过搜索模板来执行查询的例子，如下图：</p>
 
-<p>我们再随便打开一篇文章：<a href="https://elasticsearch.cn/question/1023">https://elasticsearch.cn/question/1023</a>，内容如下图：</p>
-
-<p><img src="media/15285964747097/15285998430298.jpg" alt=""/></p>
-
-<p>我们随便复制一段文字：</p>
-
-<pre><code>Understand the industrial trend of big data technology (e.g. elasticsearch, web crawler, Kafka).
+<pre><code>GET _search/template
+{
+    &quot;source&quot; : {
+      &quot;query&quot;: { &quot;match&quot; : { &quot;{{my_field}}&quot; : &quot;{{my_value}}&quot; } },
+      &quot;size&quot; : &quot;{{my_size}}&quot;
+    },
+    &quot;params&quot; : {
+        &quot;my_field&quot; : &quot;name&quot;,
+        &quot;my_value&quot; : &quot;张三&quot;,
+        &quot;my_size&quot; : 10
+    }
+}
 </code></pre>
 
-<p>然后放到搜索框里面检索一下，结果如下：</p>
+<p>这个 JSON 请求体主要包含两个参数，一个是 source 用来定义我们的模板，里面可以看到 query、size 都是我们常见的查询参数，比如这里使用的是 match 查询，字段参数是 my_field，<code>{{}}</code> 是 mustache 的语法，表示这个是引用的一个变量名，那么变量是怎么来的呢，我们看到下面有一个 params 节点，下面就是定义了这些变量的值。我们这个模板最后渲染的查询条件为：</p>
 
-<p><img src="media/15285964747097/15285997280401.jpg" alt=""/></p>
+<pre><code>{
+      &quot;query&quot;: { &quot;match&quot; : { &quot;name&quot; : &quot;张三&quot; } },
+      &quot;size&quot; : &quot;10&quot;
+ }
+ 
+</code></pre>
 
-<p>可以看到，完全找不到我们的刚刚的那篇文章。</p>
+<p>我们通过执行 <code>_search/template</code> 这个 API 就能够动态传参并渲染查询条件从而得到查询结果。<br/>
+不过如果还是需要传完整的这样一个模板定义，那么还是没有达到我们的目的啊，还在 Elasticsearch 早想到了，我们可以把上面的模板单独存在一个地方，在使用的时候，通过模板 ID 引用就可以了。</p>
 
-<p>我们再来搜索一下  <code>学习</code>，看看结果：</p>
+<h3 id="toc_1">小知识</h3>
 
-<p><img src="media/15285964747097/15286008013887.jpg" alt=""/></p>
+<ul>
+<li>取回模板定义的语法： <code>GET _scripts/&lt;templatename&gt;</code></li>
+<li>删除模板定义的语法： <code>DELETE _scripts/&lt;templatename&gt;</code></li>
+</ul>
 
-<p>有不少结果返回，然后再搜索一下 拼音 <code>xuexi</code>，看看结果：</p>
+<h2 id="toc_2">功能集成</h2>
 
-<p><img src="media/15285964747097/15286007456235.jpg" alt=""/></p>
+<p>还是延续社区文章数据的例子，我们先创建一个搜索模板对象，模板 ID 我们加上版本号，为了方便以后支持不同的版本，我们将该搜索模板取名为 <code>forum_search_template_v1</code> ，如下：</p>
 
-<p>可以看到只找到了一个信息。</p>
+<pre><code>POST _scripts/forum_search_template_v1
+{
+  &quot;script&quot;: {
+    &quot;lang&quot;: &quot;mustache&quot;,
+    &quot;source&quot;: {
+      &quot;size&quot;: &quot;{{size}}&quot;,
+      &quot;query&quot;: {
+        &quot;match&quot;: {
+          &quot;{{field}}&quot;: &quot;{{query}}&quot;
+        }
+      },
+      &quot;_source&quot;: [
+        &quot;title&quot;,
+        &quot;id&quot;,
+        &quot;uid&quot;,
+        &quot;views&quot;
+      ]
+    }
+  }
+}
+</code></pre>
 
-<p>我们再试试繁体 <code>學習</code>，看看搜索结果：<br/>
-<img src="media/15285964747097/15286006755574.jpg" alt=""/></p>
+<p>现在我们看看如何来调用这个模板，并动态的传参，示例如下：</p>
 
-<p>居然查询结果各不相同啊，但是对于搜索的用户来说，我本来就不知道有什么东西，我只是随便丢一个关键字就是想找找看，<code>学习</code>、<code>xuexi</code> 和 <code>學習</code> 应该无差别才对。</p>
+<pre><code>GET forum-mysql/_search/template
+{
+  &quot;id&quot;: &quot;forum_search_template_v1&quot;,
+  &quot;params&quot;: {
+    &quot;field&quot;: &quot;title&quot;,
+    &quot;query&quot;: &quot;elasticsearch&quot;,
+    &quot;size&quot;: 10
+  }
+}
+</code></pre>
 
-<p>还有一个就是社区分享的 PPT，比如我想快速找到我感兴趣的 PPT，如下图：</p>
+<h3 id="toc_3">小知识</h3>
 
-<p><img src="media/15285964747097/15285991022218.jpg" alt=""/></p>
+<ul>
+<li>通过设置一个或者多个索引来应用索引模板的方法：<code>GET index1,index2*/_search/template</code></li>
+</ul>
 
-<p>因为这个分享的功能是新开发的，相关内容也没有加入到数据库的索引里面，所以按 PPT 的标题、描述和 PPT 里面的文本都查不到。</p>
+<p>上面的这个查询看起来是不是很清爽，执行上面的语句就能得到我们的查询结果了，更重要的是我们实现了查询条件和参数的分离。</p>
 
-<p>另外结果多了之后，一页一页的找也很麻烦，而且如果我想找最近一个月的文章，或者按分类、标签或者作者进行查看，也不行。没有各个维度的统计。没有对搜索结果的再过滤。</p>
+<p>接下来，我们只需要修改我们的 PHP 代码，替换之前硬编码的 QueryDSL 查询为我们新的模板调用就好了，如下图：<br/>
+<img src="media/15486660133014/15490181559364.jpg" alt=""/><br/>
+由于我们的 URL 是来自于后台的动态设置，我们同样需要进行相应的修改就可以了，如下图：<br/>
+<img src="media/15486660133014/15490182676340.jpg" alt=""/><br/>
+就算以后我们需要调整查询条件，我们只需要动态的修改搜索模板就好了，网站代码完全不用调整和重新部署，实在是非常的方便啊。</p>
 
-<p>这些都是用户的痛点。</p>
+<h3 id="toc_4">小知识</h3>
 
-<p>也就是本章我们要解决的任务。</p>
+<ul>
+<li>设置模板参数的默认值 <code>{{var}}{{^var}}default{{/var}}</code></li>
+<li>相关变量定义因为包含大括号 <code>{{var}}</code> 在source里面必须是包含在双引号内，否则请求体会变成不合法的 JSON，或者可以对整个 <code>source</code> 进行转义。</li>
+<li>将数组或者复杂对象直接转换为 JSON 对象 <code>{{#toJson}}parameter{{/toJson}}</code></li>
+<li>将数组拼接成字符拼接的字符串 <code>{{#join delimiter=&#39;||&#39;}}date.formats{{/join delimiter=&#39;||&#39;}}</code></li>
+</ul>
 
 
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -384,16 +437,13 @@
   <div style="width:50%;float:left;padding-left: 15px;">
 	<div class="text-left" style="padding:15px 0px;">
 		
-	        <a href="3.0_site_search.html"  title="Previous Post: 添加站内搜索功能">&laquo; 添加站内搜索功能</a>
+	        <a href="3.7_autocomplete.html"  title="Previous Post: 搜索提示">&laquo; 搜索提示</a>
 	    
 	</div>
   </div>
   <div style="width:50%;float:right;padding-right: 15px;">
 	<div class="text-right" style="padding:15px 0px;">
 		
-	        <a href="0.1_abstract.html" 
-	        title="Next Post: 摘要">摘要 &raquo;</a>
-	    
 	</div>
   </div>
 </div>
@@ -427,7 +477,7 @@ s.setAttribute('data-timestamp', +new Date());
 </div>
 <script type="text/javascript">
 	$(function(){
-		var currentURL = '3.1_task_intro.html';
+		var currentURL = '15486660133014.html';
 		$('#side-nav a').each(function(){
 			if($(this).attr('href') == currentURL){
 				$(this).parent().addClass('active');
