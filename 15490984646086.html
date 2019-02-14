@@ -607,7 +607,7 @@ GET test/_search
 
 <p>我们更新我们的索引模板，将之前的 Match Query 加上 fuzziness 相关参数从而支持 Fuzzy 模糊匹配，然后再加上一个 Query String 查询，具备支持通配符和多种查询语法的能力，最终的修改语句如下：</p>
 
-<p>另外，我们给 Query String 加上一个 <code>{{field}}.keyword</code> 字段，这样当用户进行通配符和正则匹配的时候，可以尝试对原始字符串进行模糊匹配。</p>
+<p>另外，我们给 Query String 加上一个 <code>{{field}}.keyword</code> 字段，这样当用户进行通配符和正则匹配的时候，可以尝试对原始字符串进行模糊匹配了。</p>
 
 <pre><code>POST _scripts/forum_search_template_v1
 {
@@ -648,7 +648,7 @@ GET test/_search
             },
             {
               &quot;query_string&quot;: {
-                &quot;default_field&quot;: &quot;{{field}},{{field}}.keyword&quot;,
+                &quot;fields&quot;: [&quot;{{field}}&quot;,&quot;{{field}}.keyword&quot;], 
                 &quot;query&quot;: &quot;{{query}}&quot;,
                 &quot;fuzziness&quot;: &quot;AUTO&quot;,
                 &quot;fuzzy_prefix_length&quot;: 2,
