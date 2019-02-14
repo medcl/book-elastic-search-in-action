@@ -509,8 +509,9 @@ GET test/_search
 
 <p>答案当然可以，不过有点麻烦，那有没有简单点的办法呢，答案当然是可以哈。</p>
 
-<p>Elasticsearch 的 Query String Query 就是这样的一个查询，它支持对查询条件进行解析，从而自动进行查询的改写，通配符查询、正则表达式查询都支持，甚至范围查询、多字段查询、短语查询都能支持。<br/>
-我们看一个使用正则表达式的例子：</p>
+<p>Elasticsearch 的 Query String Query 就是这样的一个查询，它支持对查询条件进行解析，从而自动进行查询的改写，通配符查询、正则表达式查询都支持，选择字段，设置权重，甚至还有范围查询、多字段查询、短语查询等等。</p>
+
+<p>我们看一个使用正则表达式的例子：</p>
 
 <pre><code>GET test/_search
 {
@@ -558,17 +559,55 @@ GET test/_search
 }
 </code></pre>
 
-<p>细心的你会发现，这里的条件后面带上了一个波浪符号 <code>~</code>，是的，这个是一个特点的语法，其实是 Lucene 的查询语法，我们要在一个输入框里面支持这么多查询类型，有需要一些特点的语法规则。</p>
+<p>细心的你会发现，这里的条件后面带上了一个波浪符号 <code>~</code>，是的，这个是一个特点的语法，其实是 Lucene 的查询语法，因为要在一个输入框里面支持这么多的查询类型，所以需要一些特定的语法规则。</p>
 
 <p>完整的文档在这里可以找到：<br/>
 <a href="https://www.elastic.co/guide/en/elasticsearch/reference/6.6/query-dsl-query-string-query.html">https://www.elastic.co/guide/en/elasticsearch/reference/6.6/query-dsl-query-string-query.html</a></p>
 
 <h1 id="toc_8">功能集成</h1>
 
-<p>我们更新我们的索引模板，将之前的 Match Query 替换成 Query String 查询，如下：</p>
+<p>了解了这么多进行模糊匹配的黑科技，我们来看看如何和我们的搜索模板进行集成吧。</p>
 
-<pre><code># 更新模板
-POST _scripts/forum_search_template_v1
+<h3 id="toc_9">奇怪的查询</h3>
+
+<p>你也许会想到，我们直接把搜索模板里面的 Match 查询直接换成 QueryString 查询不就行了么？<br/>
+并将查询变量 <code>{{query}}</code> 改成 <code>{{query}}~</code>，</p>
+
+<p>真的么？我们看一下下面的这个查询：</p>
+
+<pre><code>POST test/doc/5
+{
+  &quot;doc&quot;:&quot;社区福利&quot;
+}
+
+GET test/_search
+{
+  &quot;query&quot;: {
+    &quot;query_string&quot;: {
+      &quot;default_field&quot;: &quot;doc&quot;, 
+      &quot;query&quot;: &quot; 社区福利~&quot;,
+      &quot;fuzziness&quot;: &quot;AUTO&quot;,
+      &quot;fuzzy_prefix_length&quot;: 2,
+      &quot;fuzzy_max_expansions&quot;: 20,
+      &quot;fuzzy_transpositions&quot;:true
+    }
+  }
+}
+</code></pre>
+
+<p>奇怪，为什么查不到呢？但是去掉波浪号就能查到！</p>
+
+<p>这是因为加上波浪号，自动转成了 Fuzzy Query，并且波浪号相连的字符串 <code>社区福里</code> 变成了一个整体条件，不会再进行文本分析，如果你的查询条件是英文倒是没问题，但是如果是中文就会有问题，也就是中文字符串会拆分成单个词（Elasitcsearch 默认的分词是 Standard Analyzer，还记得吧），比如这个条件 <code>社区福里</code>，但是注意索引内的数据其实是 <code>社</code>、<code>区</code>、<code>福</code>、<code>利</code>，所以上面的查询就会匹配不上。</p>
+
+<p>可以发现，中文字符串和英文字符串在 Elasticsearch 里面的很多地方，其表现行为是不一样的，所以我们在自己的业务系统中，一定要反复测试。</p>
+
+<p>可以看到，本来普通的 Match Query 通过全文匹配能查到结果，加上模糊规则之后反而差不多了，这个可不秒。</p>
+
+<p>并且，我们用户输入的查询是没有波浪符号的，也就是用 Query String 查询是不会自动的启用模糊匹配的。所以，我们还是需要单独加一个 Fuzzy Query 查询给我们的搜索模板，另外 Fuzzy Query 是进行的整个查询条件的匹配，我们可能需要对条件进行分词，所以，我们还是需要使用 Match Query。</p>
+
+<p>我们更新我们的索引模板，将之前的 Match Query 加上 fuzziness 相关参数从而支持 Fuzzy 模糊匹配，然后再加上一个 Query String 查询，具备支持通配符和多种查询语法的能力，最终的修改语句如下：</p>
+
+<pre><code>POST _scripts/forum_search_template_v1
 {
   &quot;script&quot;: {
     &quot;lang&quot;: &quot;mustache&quot;,
@@ -593,14 +632,27 @@ POST _scripts/forum_search_template_v1
                   &quot;boost&quot;: 2
                 }
               }
-            },{
+            },
+            {
+              &quot;match&quot;: {
+                &quot;{{field}}&quot;: {
+                  &quot;query&quot;: &quot;{{query}}&quot;,
+                  &quot;fuzziness&quot;: &quot;AUTO&quot;,
+                  &quot;max_expansions&quot;: 10,
+                  &quot;prefix_length&quot;: 2,
+                  &quot;fuzzy_transpositions&quot;: true
+                }
+              }
+            },
+            {
               &quot;query_string&quot;: {
-                &quot;default_field&quot;: &quot;{{field}}&quot;, 
-                &quot;query&quot;: &quot;{{query}}~&quot;,
+                &quot;default_field&quot;: &quot;{{field}}&quot;,
+                &quot;query&quot;: &quot;{{query}}&quot;,
                 &quot;fuzziness&quot;: &quot;AUTO&quot;,
                 &quot;fuzzy_prefix_length&quot;: 2,
                 &quot;fuzzy_max_expansions&quot;: 10,
-                &quot;fuzzy_transpositions&quot;:true
+                &quot;fuzzy_transpositions&quot;: true,
+                &quot;allow_leading_wildcard&quot;: false
               }
             }
           ]
@@ -630,18 +682,21 @@ GET forum-mysql/_search/template<br/>
 }<br/>
 </code></p>
 
-<p>结果方便是：</p>
+<p>结果分别是：</p>
 
 <ul>
 <li>Elastic Stack 5.2.2 发布 </li>
 <li>Elastic Stack 5.2.0 发布</li>
 <li>Elastic Stack 5.2.1 发布</li>
+<li>...</li>
 </ul>
 
-<p>现在，总算是完美的解决了输错字的模糊匹配问题。同时对显示的搜索模板进行更新，我们在社区网站上的搜索框已具有了新的能力了。</p>
+<p>好了，现在总算是完美的解决了输错字的模糊匹配问题。同时对线上的搜索模板进行更新，那我们社区网站上的搜索框也就立即具有了新的搜索能力了。</p>
 
 <p>效果如下：<br/>
-<img src="media/15490984646086/15501432367150.jpg" alt=""/></p>
+<img src="media/15490984646086/15501465209650.jpg" alt=""/></p>
+
+<p><img src="media/15490984646086/15501466384989.jpg" alt=""/></p>
 
 
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
