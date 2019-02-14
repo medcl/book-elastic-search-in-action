@@ -607,6 +607,8 @@ GET test/_search
 
 <p>我们更新我们的索引模板，将之前的 Match Query 加上 fuzziness 相关参数从而支持 Fuzzy 模糊匹配，然后再加上一个 Query String 查询，具备支持通配符和多种查询语法的能力，最终的修改语句如下：</p>
 
+<p>另外，我们给 Query String 加上一个 <code>{{field}}.keyword</code> 字段，这样当用户进行通配符和正则匹配的时候，可以尝试对原始字符串进行模糊匹配。</p>
+
 <pre><code>POST _scripts/forum_search_template_v1
 {
   &quot;script&quot;: {
@@ -646,7 +648,7 @@ GET test/_search
             },
             {
               &quot;query_string&quot;: {
-                &quot;default_field&quot;: &quot;{{field}}&quot;,
+                &quot;default_field&quot;: &quot;{{field}},{{field}}.keyword&quot;,
                 &quot;query&quot;: &quot;{{query}}&quot;,
                 &quot;fuzziness&quot;: &quot;AUTO&quot;,
                 &quot;fuzzy_prefix_length&quot;: 2,
@@ -669,18 +671,18 @@ GET test/_search
 }
 </code></pre>
 
-<p>我们测试一下查询结果：<br/>
-<code><br/>
-GET forum-mysql/_search/template<br/>
-{<br/>
-  &quot;id&quot;: &quot;forum_search_template_v1&quot;,<br/>
-  &quot;params&quot;: {<br/>
-    &quot;field&quot;: &quot;title&quot;,<br/>
-    &quot;query&quot;: &quot;elastk stafk 5.2.2&quot;,<br/>
-    &quot;size&quot;: 10<br/>
-  }<br/>
-}<br/>
-</code></p>
+<p>我们测试一下查询结果：</p>
+
+<pre><code>GET forum-mysql/_search/template
+{
+  &quot;id&quot;: &quot;forum_search_template_v1&quot;,
+  &quot;params&quot;: {
+    &quot;field&quot;: &quot;title&quot;,
+    &quot;query&quot;: &quot;elastk stafk 5.2.2&quot;,
+    &quot;size&quot;: 10
+  }
+}
+</code></pre>
 
 <p>结果分别是：</p>
 
