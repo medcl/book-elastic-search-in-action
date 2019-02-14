@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  常用 API 介绍 - Elastic 搜索开发实战
+  模糊查询 - Elastic 搜索开发实战
   
   </title>
  <meta name="description" content="Elastic 搜索开发实战，图书">
@@ -329,407 +329,319 @@
 <!-- end toc -->
 
 <div class="markdown-body">
-<h1>常用 API 介绍</h1>
+<h1>模糊查询</h1>
 
-<p>前面介绍了 Elasticsearch 和 Kibana 的安装，这一节主要来介绍一下在 Kibana 里面的 DevTools 下，具体如何来进行最基本的 Elasticsearch 操作。Elasticsearch 大部分 API 的输入输出都是 JSON 数据结构。有关 JSON 的更完整的介绍可访问：<br/>
-<a href="https://www.json.org/json-zh.html">https://www.json.org/json-zh.html</a></p>
+<p>问题又来了，我们在实际的网站访问情况下，发现用户经常出现拼写错误，假如应该正确的关键字是 <code>elastic</code> ，但是总会有些人会拼写成  <code>elastik</code>、<code>elasic</code> 或是 <code>eastic</code> 等等，结果就找不到任何结果。</p>
 
-<h2 id="toc_0">增删改查</h2>
+<p>这个问题我们在 Elasticsearch 解决的办法也是有很多的，我们分别来看一下。</p>
 
-<p>首先是索引的操作，其实在第一节关于 Elasticsearch 安装的时候，已经介绍过，我们再来回顾一下。</p>
+<p>首先我们来看一下，Elasticsearch 底层是如何处理这种输入错误的，假如我们索引里面有的词语是 <code>elastic</code>，而用户输入的是 <code>elastik</code>，我们用肉眼其实一眼就能看出来，这两个词语其实只有一个字母对不上，因为 Elasticsearch 底层是基于倒排索引来进行匹配的，而倒排索引的主要部分就是一个一个的 倒排词语（Term），在索引里面我们有一个 Term 词典方便我们来快速检测某个 Term 在不在索引里面。</p>
 
-<p>假设我们创建一个有包含 2 个字段的索引文档。</p>
+<h1 id="toc_0">字符相似</h1>
 
-<pre><code class="language-js">POST twitter/doc/1
+<p>虽然我们 Term 词典里面没有 <code>elastik</code>，但是却有 <code>elastic</code> 啊，所以，这里就要看如何计算这俩字符的相似度了，这里有一个编辑距离的概念（Lucene 里面使用的是莱文斯坦距离，Levenshtein edit distance），指的是给定两个不同的字符串，把一个字符串转换成另外一个所需的最少的编辑操作次数。如果查询的 Term 和索引的 Term 在编辑 N 个词之后能够匹配得上，那么我们认为这样也算是满足（容忍）匹配的需求。而这个编辑距离也就是控制我们模糊匹配的范围。<code>elastic</code> 将末尾 <code>c</code> 编辑为 <code>k</code> 即可匹配上 <code>elastik</code>，该 Term 所对应的文档即可返回，这里的编辑距离 N 也就是 1。</p>
+
+<p>我们看看这里的几个字符串之间通过编辑转换的例子:</p>
+
+<ul>
+<li><code>elastix</code> =&gt; <code>elastic</code>， 编辑距离1，替换x 为 c</li>
+<li><code>elasti</code> =&gt; <code>elastic</code>，编辑距离1，末尾插入字符c</li>
+<li><code>elasticd</code> =&gt; <code>elastic</code>，编辑距离1，删除字符d</li>
+</ul>
+
+<p>看来，通过简单的插入、修改和删除，我们可以将一个字符转换为另外一个字符，他们还是比较相似的嘛。</p>
+
+<h2 id="toc_1">小知识</h2>
+
+<p>Lucene 底层使用 FST（Finite State Transducer）作为数据结构来保存 Term 词典。FST 是一个有向无环图，相比其他数据结构更节省内存，这样可以把 Term 词典完全加载到内存，方便快速定位 Term。<br/>
+这里有一篇关于 FST 不错的介绍：<a href="http://www.cnblogs.com/LBSer/p/4119841.html">http://www.cnblogs.com/LBSer/p/4119841.html</a></p>
+
+<p>有关莱文斯坦距离：<a href="https://baike.baidu.com/item/%E8%8E%B1%E6%96%87%E6%96%AF%E5%9D%A6%E8%B7%9D%E7%A6%BB">https://baike.baidu.com/item/%E8%8E%B1%E6%96%87%E6%96%AF%E5%9D%A6%E8%B7%9D%E7%A6%BB</a></p>
+
+<h1 id="toc_2">查询的 fuzziness 参数</h1>
+
+<p>在 Elasticsearch 里面，对字符类型的字段使用全文查询时，如 Match Query，可以通过设置 <code>fuzziness</code> 参数来控制查询的模糊匹配的程度。<code>fuzziness</code> 参数可以设置为：</p>
+
+<ul>
+<li>0, 1, 2，　可以设置为具体的编辑距离，最大为２。</li>
+<li>AUTO，自动模式，基于词语的长度来自动选择编辑距离，还支持可选的格式 <code>AUTO:[low],[high]</code> 来设置一个字符的距离规则范围，如果不指定参数 low 和 high，默认是3和6，也就是 <code>AUTO:3,6</code>， 对于不同的字符串，则会有这样的编辑距离规则：</li>
+<li>0..2，对于长度小于2的字串，必须绝对匹配</li>
+<li>3..5，对于长度范围3到5的字串，允许一个编辑距离</li>
+<li>&gt;5，对于长度大于5的字串，允许两个编辑距离</li>
+</ul>
+
+<p>AUTO 模式能够自动根据字符串的长度进行选择，我们应该优先使用 AUTO 模式。</p>
+
+<p>举例如下：</p>
+
+<pre><code>DELETE test
+
+POST test/doc/1
 {
-  &quot;name&quot;:&quot;jack&quot;,
-  &quot;age&quot;:30
+  &quot;doc&quot;:&quot;elastic&quot;
 }
-</code></pre>
 
-<p>返回结果为：</p>
-
-<pre><code class="language-js">{
-  &quot;_index&quot;: &quot;twitter&quot;,
-  &quot;_type&quot;: &quot;doc&quot;,
-  &quot;_id&quot;: &quot;1&quot;,
-  &quot;_version&quot;: 1,
-  &quot;result&quot;: &quot;created&quot;,
-  &quot;_shards&quot;: {
-    &quot;total&quot;: 2,
-    &quot;successful&quot;: 1,
-    &quot;failed&quot;: 0
-  },
-  &quot;_seq_no&quot;: 0,
-  &quot;_primary_term&quot;: 1
-}
-</code></pre>
-
-<p>如果要取回这个文档，只需要将 POST 换成 GET，如下：</p>
-
-<pre><code class="language-js">GET twitter/doc/1
-</code></pre>
-
-<p>返回结果为：</p>
-
-<pre><code class="language-js">{
-  &quot;_index&quot;: &quot;twitter&quot;,
-  &quot;_type&quot;: &quot;doc&quot;,
-  &quot;_id&quot;: &quot;1&quot;,
-  &quot;_version&quot;: 1,
-  &quot;found&quot;: true,
-  &quot;_source&quot;: {
-    &quot;name&quot;: &quot;jack&quot;,
-    &quot;age&quot;: 30
-  }
-}
-</code></pre>
-
-<p>返回结果里面的 <code>found</code> 说明找到了该文档，<code>_source</code> 即我们 POST 进去的原始文档。</p>
-
-<p>如果要修改这个文档，有两种方式，一种是完全替换，使用相同的路径即可，我们修改 age 为 35，如下：</p>
-
-<pre><code class="language-js">PUT twitter/doc/1
+POST test/doc/2
 {
-  &quot;name&quot;:&quot;jack&quot;,
-  &quot;age&quot;:35
-}
-</code></pre>
-
-<p>返回结果：</p>
-
-<pre><code class="language-js">{
-  &quot;_index&quot;: &quot;twitter&quot;,
-  &quot;_type&quot;: &quot;doc&quot;,
-  &quot;_id&quot;: &quot;1&quot;,
-  &quot;_version&quot;: 2,
-  &quot;result&quot;: &quot;updated&quot;,
-  &quot;_shards&quot;: {
-    &quot;total&quot;: 2,
-    &quot;successful&quot;: 1,
-    &quot;failed&quot;: 0
-  },
-  &quot;_seq_no&quot;: 1,
-  &quot;_primary_term&quot;: 1
-}
-</code></pre>
-
-<p>还一种更新叫做部分更新，你只需指定要更新的字段和该字段的值即可，不用准备完整的 JSON 文档，如下：</p>
-
-<pre><code class="language-js">POST twitter/doc/1/_update
-{
-    &quot;doc&quot; : {
-        &quot;name&quot; : &quot;mark&quot;
-    }
-}
-</code></pre>
-
-<p>最外层的 <code>doc</code> 是固定的结构，我们只需要准备要更新的字段放在里面就行。</p>
-
-<p>最后我们再来看看删除，只需要把取回文档操作的 GET 换成 DELETE 就行了，如下：</p>
-
-<pre><code class="language-js">DELETE twitter/doc/1
-</code></pre>
-
-<p>返回：</p>
-
-<pre><code class="language-js">{
-  &quot;_index&quot;: &quot;twitter&quot;,
-  &quot;_type&quot;: &quot;doc&quot;,
-  &quot;_id&quot;: &quot;1&quot;,
-  &quot;_version&quot;: 4,
-  &quot;result&quot;: &quot;deleted&quot;,
-  &quot;_shards&quot;: {
-    &quot;total&quot;: 2,
-    &quot;successful&quot;: 1,
-    &quot;failed&quot;: 0
-  },
-  &quot;_seq_no&quot;: 3,
-  &quot;_primary_term&quot;: 1
-}
-</code></pre>
-
-<p>很好，<code>result</code> 显示删除成功。</p>
-
-<h2 id="toc_1">搜索的使用</h2>
-
-<p>我们创建两个索引文档，ID 分别是 1 和 2，如下：</p>
-
-<pre><code class="language-js">POST twitter/doc/1
-{
-  &quot;name&quot;:&quot;jack&quot;,
-  &quot;age&quot;:30
+  &quot;doc&quot;:&quot;elastik&quot;
 }
 
-POST twitter/doc/2
-{
-  &quot;name&quot;:&quot;mark&quot;,
-  &quot;age&quot;:35
-}
-</code></pre>
-
-<p>现在我们想通过名称来进行搜索，可以使用 <code>_search</code> 接口，然后指定条件 <code>q</code> 来传递查询关键字，如下：</p>
-
-<pre><code class="language-js">GET twitter/_search?q=jack
-</code></pre>
-
-<p>返回：</p>
-
-<pre><code class="language-js">{
-  &quot;took&quot;: 51,
-  &quot;timed_out&quot;: false,
-  &quot;_shards&quot;: {
-    &quot;total&quot;: 5,
-    &quot;successful&quot;: 5,
-    &quot;skipped&quot;: 0,
-    &quot;failed&quot;: 0
-  },
-  &quot;hits&quot;: {
-    &quot;total&quot;: 1,
-    &quot;max_score&quot;: 0.2876821,
-    &quot;hits&quot;: [
-      {
-        &quot;_index&quot;: &quot;twitter&quot;,
-        &quot;_type&quot;: &quot;doc&quot;,
-        &quot;_id&quot;: &quot;1&quot;,
-        &quot;_score&quot;: 0.2876821,
-        &quot;_source&quot;: {
-          &quot;name&quot;: &quot;jack&quot;,
-          &quot;age&quot;: 30
-        }
-      }
-    ]
-  }
-}
-</code></pre>
-
-<p><code>hits</code> 就是我们搜索返回的结果，<code>total</code> 是搜索命中的结果总数，下面的 <code>hits</code> 是本次返回的部分搜索结果，是一个数组结构，里面是具体的索引文档。</p>
-
-<p>我们再看看如何通过年龄来进行检索，如下：</p>
-
-<pre><code class="language-js">GET twitter/_search?q=35
-</code></pre>
-
-<p>返回：</p>
-
-<pre><code class="language-js">{
-  &quot;took&quot;: 9,
-  &quot;timed_out&quot;: false,
-  &quot;_shards&quot;: {
-    &quot;total&quot;: 5,
-    &quot;successful&quot;: 5,
-    &quot;skipped&quot;: 0,
-    &quot;failed&quot;: 0
-  },
-  &quot;hits&quot;: {
-    &quot;total&quot;: 1,
-    &quot;max_score&quot;: 1,
-    &quot;hits&quot;: [
-      {
-        &quot;_index&quot;: &quot;twitter&quot;,
-        &quot;_type&quot;: &quot;doc&quot;,
-        &quot;_id&quot;: &quot;2&quot;,
-        &quot;_score&quot;: 1,
-        &quot;_source&quot;: {
-          &quot;name&quot;: &quot;mark&quot;,
-          &quot;age&quot;: 35
-        }
-      }
-    ]
-  }
-}
-</code></pre>
-
-<p>另外，我们还能限定查询的字段，如只对年龄字段进行查询，如下：</p>
-
-<pre><code class="language-js">GET twitter/_search?q=age:35
-</code></pre>
-
-<p>除此以外，还能使用 QueryDSL 来写查询表达式，即将查询表达式以 JSON 的方式来通过请求体（request body）来传递，而不是走 URL 网址参数，如下：</p>
-
-<pre><code class="language-js">GET twitter/_search
+GET test/_search
 {
   &quot;query&quot;: {
     &quot;match&quot;: {
-      &quot;age&quot;: 35
-    }
-  }
-}
-</code></pre>
-
-<p>搜索结果应该和前面 url 传参效果一致，读者可以自行尝试一下。</p>
-
-<h2 id="toc_2">聚合的使用</h2>
-
-<p>聚合是 Elasticsearch 里面用来对搜索结果的数据进行统计和聚合操作的过程，通过聚合，我们可以对搜索结果做到按各个维度的统计，结合丰富的前端展现，从而实现良好的搜索体验。</p>
-
-<p>我们再创建两个索引文档，如下：</p>
-
-<pre><code class="language-js">POST twitter/doc/3
-{
-  &quot;name&quot;:&quot;john&quot;,
-  &quot;age&quot;:30
-}
-POST twitter/doc/4
-{
-  &quot;name&quot;:&quot;mark&quot;,
-  &quot;age&quot;:40
-}
-</code></pre>
-
-<p>现在我们想统计一下，年龄的分布情况，可以使用如下的查询条件，最外层的 <code>size</code> 为 <code>0</code> 这样可以不返回搜索命中的文档，只返回聚合的统计结果，<code>aggs</code> 就是我们描述聚合查询语句根节点，我们使用 <code>terms</code> 聚合类型来对 <code>age</code> 字段的值进行统计，并且只返回前 <code>10</code> 个统计值，然后这些统计结果我们命名为 <code>age_stats</code>，如下图：</p>
-
-<pre><code class="language-js">GET twitter/_search
-{
-  &quot;size&quot;: 0,
-  &quot;aggs&quot;: {
-    &quot;age_stats&quot;: {
-      &quot;terms&quot;: {
-        &quot;field&quot;: &quot;age&quot;,
-        &quot;size&quot;: 10
+      &quot;doc&quot;:{
+        &quot;query&quot;: &quot;elastix&quot;,
+        &quot;fuzziness&quot;: &quot;AUTO&quot;
       }
     }
   }
 }
 </code></pre>
 
-<p>返回：</p>
+<p>注意啦，不是所有的查询都支持 fuzziness 参数的。除了 Match Query，还有 QueryString Query 和 Simple Query String Query 也支持。他们的参数也各不相同，所以在使用的时候，还请查询官方的 API 手册。</p>
 
-<pre><code class="language-js">{
-  &quot;took&quot;: 55,
-  &quot;timed_out&quot;: false,
-  &quot;_shards&quot;: {
-    &quot;total&quot;: 5,
-    &quot;successful&quot;: 5,
-    &quot;skipped&quot;: 0,
-    &quot;failed&quot;: 0
-  },
-  &quot;hits&quot;: {
-    &quot;total&quot;: 4,
-    &quot;max_score&quot;: 0,
-    &quot;hits&quot;: []
-  },
-  &quot;aggregations&quot;: {
-    &quot;age_stats&quot;: {
-      &quot;doc_count_error_upper_bound&quot;: 0,
-      &quot;sum_other_doc_count&quot;: 0,
-      &quot;buckets&quot;: [
-        {
-          &quot;key&quot;: 30,
-          &quot;doc_count&quot;: 2
-        },
-        {
-          &quot;key&quot;: 35,
-          &quot;doc_count&quot;: 1
-        },
-        {
-          &quot;key&quot;: 40,
-          &quot;doc_count&quot;: 1
+<h2 id="toc_3">小测试</h2>
+
+<ul>
+<li>为什么编辑距离没有超过2的？编辑距离是越大越好么？</li>
+<li><code>fuzziness</code> 也可以设置成数字，如果设置成超过10是什么效果？</li>
+<li><code>elast ic</code>是否能够匹配结果？那 <code>e lastic</code> 呢？</li>
+</ul>
+
+<p>另外，fuzzy 还支持是否运行将字符的位置变换作为一次编辑，在 Match Query 里面默认是启用的，如下：elastic -&gt; elsatic，假如我们不希望位置变换，我们可以设置参数 <code>fuzzy_transpositions</code> 为 <code>false</code>，如下：</p>
+
+<pre><code>GET test/_search
+{
+  &quot;query&quot;: {
+    &quot;match&quot;: {
+      &quot;doc&quot;:{
+        &quot;query&quot;: &quot; elsatic&quot;,
+        &quot;fuzziness&quot;: &quot;1&quot;,
+        &quot;fuzzy_transpositions&quot;:false
+      }
+    }
+  }
+}
+</code></pre>
+
+<p>另外，我们还能通过参数 <code>prefix_length</code> 来控制两个字符串匹配的最小相同的前缀大小，如 <code>elastic</code> 和 <code>elsatic</code>，如果 <code>prefix_length</code> 参数为 <code>3</code> 则会匹配失败。该参数默认是 <code>0</code>。</p>
+
+<p>因为，fuzzy 查询会将查询尝试变换成其他的条件，所以会把一个条件 expand 成很多条件，我们可以通过参数来 <code>max_expansions</code> 来进行限制，默认值是 <code>50</code>。</p>
+
+<p>为了避免产生太多的模糊词语和节省查询开销，我们将 <code>prefix_length</code> 设置成 <code>2</code>，以及将<code>max_expansions</code>设置成 <code>10</code> 来进行优化。</p>
+
+<h1 id="toc_4">Fuzzy Query</h1>
+
+<p>Elasticsearch 还提供了一个独立的 Fuzzy Query，不过参数有一些变化，使用 <code>transpositions</code> 来控制是否开启位置变换，且默认是禁止的，同样支持 <code>fuzziness</code>、<code>prefix_length</code> 和 <code>max_expansions</code>。示例如下：</p>
+
+<pre><code>GET test/_search
+{
+  &quot;query&quot;: {
+    &quot;fuzzy&quot;: {
+      &quot;doc&quot;:{
+        &quot;value&quot;: &quot; elsatic&quot;,
+        &quot;fuzziness&quot;: &quot;AUTO&quot;,
+        &quot;transpositions&quot;:true
+      }
+    }
+  }
+}
+</code></pre>
+
+<p>注意此处的例子里面，条件 <code>elsatic</code>的第一个字符是空格，如果再加一个空格就会查不到数据，为什么呢？</p>
+
+<p>因为，相比在 Match 里面使用 fuzziness 参数来支持模糊查询，Fuzzy Query 参数里面传递的 <code>value</code> 条件将作为一个 Term 整体，也就是不会进行任何的文本分析处理，空格的移除也会变成一次编辑，在这里的 AUTO 模式会允许两次编辑，但是我们需要移除两次空格和一次位置变换，也就是3，自然查询不到索引里面的 <code>elastic</code> 啦。</p>
+
+<h1 id="toc_5">Wildcard 查询</h1>
+
+<p>大家是否还记得在使用 Access 或是其它系统的时候，有一种处理模糊条件的办法，就是用 <code>?</code> 代替不知道的单个字符，用 <code>*</code> 代表任意多个字符。对了，我们一般叫这种查询为通配符查询。<br/>
+如 <code>elasti?</code> 可以匹配上 <code>elastic</code> 以及 <code>elas*</code> 同样可以匹配上 <code>elastic</code>。</p>
+
+<p>示例如下： </p>
+
+<pre><code>GET test/_search
+{
+  &quot;query&quot;: {
+    &quot;wildcard&quot;: {
+      &quot;doc&quot;: {
+        &quot;value&quot;: &quot;elasti?&quot;
+      }
+    }
+  }
+}
+</code></pre>
+
+<p>上面的查询会同时匹配上索引里面的 <code>elstic</code> 和 <code>elstik</code>。</p>
+
+<p>Wildcard 在使用的时候一定要特别小心，因为它的性能比较差，尤其是不要让用户在输入的条件里面，第一个字符就以通配符（如：<code>*lasi</code>）来开头，因为 wildcard 要遍历所有可能的 Term 词典，范围越大，代价越大。</p>
+
+<p>作为一个搜索框，如果也能够支持支持通配符搜索给用户，当然是大大的方便了用户啊。加上加上。</p>
+
+<h1 id="toc_6">Regex 查询</h1>
+
+<p>既然通配符搜索都有了，那么还有一种非常常见的正则匹配能不能也加上呢？</p>
+
+<p>答案是可以的！</p>
+
+<p>Elasticsearch 同样支持使用正则表达式来构建查询，正则表达式功能非常丰富，比通配符要强大的多，这里就不展开说明了，这里有详细的文档：<br/>
+<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-regexp-query.html">https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-regexp-query.html</a></p>
+
+<p>值得一提的是，Elasticsearch 支持的正则表达式不是和 Perl 语法的正则表达式兼容的，只是一部分子集，另外，正则表达式查询和通配符查询都是对分词之后的倒排索引的 Term 进行的匹配，不是原始的字符串，这一点一定要弄清楚了。如 <code>elas.*</code> 可以匹配上 <code>elastic</code>，示例如下：</p>
+
+<pre><code>GET test/_search
+{
+  &quot;query&quot;: {
+    &quot;regexp&quot;: {
+      &quot;doc&quot;:{
+        &quot;value&quot;: &quot;elas.*&quot;
+      }
+    }
+  }
+}
+</code></pre>
+
+<p>注意，正则表达式虽然威力强大，但是用的不好也会造成很大的性能问题。条件越具体越精确越好，避免歧义，尽量确保正则表达式左端前缀匹配的足够长，且不要以通配符开头。</p>
+
+<h1 id="toc_7">Query String 查询</h1>
+
+<p>原来实现模糊匹配的方法有这么多，如果要都支持这些查询，我们是不是要分别构建3个查询，放到 bool 查询里面，然后分别设置权重呢？</p>
+
+<p>答案当然可以，不过有点麻烦，那有没有简单点的办法呢，答案当然是可以哈。</p>
+
+<p>Elasticsearch 的 Query String Query 就是这样的一个查询，它支持对查询条件进行解析，从而自动进行查询的改写，通配符查询、正则表达式查询都支持，甚至范围查询、多字段查询、短语查询都能支持。<br/>
+我们看一个使用正则表达式的例子：</p>
+
+<pre><code>GET test/_search
+{
+  &quot;query&quot;: {
+    &quot;query_string&quot;: {
+      &quot;query&quot;: &quot;/elasti[ck]+/&quot;
+    }
+  }
+}
+</code></pre>
+
+<p>注意，如果是正则表达式，请使用 <code>/</code> 作为开头和结尾。</p>
+
+<p>然后再看看通配符的查询，如下：</p>
+
+<pre><code>GET test/_search
+{
+  &quot;query&quot;: {
+    &quot;query_string&quot;: {
+      &quot;query&quot;: &quot;elasti*&quot;,
+      &quot;allow_leading_wildcard&quot;: false
+    }
+  }
+}
+</code></pre>
+
+<p>查询一切正常，我们还通过设置 <code>allow_leading_wildcard</code> 为 <code>false</code> 来禁止用户在查询条件开头输入通配符，保证查询性能。</p>
+
+<p>这样，我们就不用担心用户输入正则表达式和通配符没有结果的问题了，我们可以在用户输入框的地方，给一下提示说明或者帮助文字，这些算是额外支持的高级用法。</p>
+
+<p>Query String String 也支持 Fuzzy 参数，示例如下：</p>
+
+<pre><code>GET test/_search
+{
+  &quot;query&quot;: {
+    &quot;query_string&quot;: {
+      &quot;default_field&quot;: &quot;doc&quot;, 
+      &quot;query&quot;: &quot; elasti~&quot;,
+      &quot;fuzziness&quot;: &quot;AUTO&quot;,
+      &quot;fuzzy_prefix_length&quot;: 2,
+      &quot;fuzzy_max_expansions&quot;: 20,
+      &quot;fuzzy_transpositions&quot;:true
+    }
+  }
+}
+</code></pre>
+
+<p>细心的你会发现，这里的条件后面带上了一个波浪符号 <code>~</code>，是的，这个是一个特点的语法，其实是 Lucene 的查询语法，我们要在一个输入框里面支持这么多查询类型，有需要一些特点的语法规则。</p>
+
+<p>完整的文档在这里可以找到：<br/>
+<a href="https://www.elastic.co/guide/en/elasticsearch/reference/6.6/query-dsl-query-string-query.html">https://www.elastic.co/guide/en/elasticsearch/reference/6.6/query-dsl-query-string-query.html</a></p>
+
+<h1 id="toc_8">功能集成</h1>
+
+<p>我们更新我们的索引模板，将之前的 Match Query 替换成 Query String 查询，如下：</p>
+
+<pre><code># 更新模板
+POST _scripts/forum_search_template_v1
+{
+  &quot;script&quot;: {
+    &quot;lang&quot;: &quot;mustache&quot;,
+    &quot;source&quot;: {
+      &quot;size&quot;: &quot;{{size}}&quot;,
+      &quot;query&quot;: {
+        &quot;bool&quot;: {
+          &quot;must&quot;: [],
+          &quot;should&quot;: [
+            {
+              &quot;prefix&quot;: {
+                &quot;{{field}}.keyword&quot;: {
+                  &quot;value&quot;: &quot;{{query}}&quot;,
+                  &quot;boost&quot;: 10
+                }
+              }
+            },
+            {
+              &quot;match_phrase_prefix&quot;: {
+                &quot;{{field}}&quot;: {
+                  &quot;query&quot;: &quot;{{query}}&quot;,
+                  &quot;boost&quot;: 2
+                }
+              }
+            },{
+              &quot;query_string&quot;: {
+                &quot;default_field&quot;: &quot;{{field}}&quot;, 
+                &quot;query&quot;: &quot;{{query}}~&quot;,
+                &quot;fuzziness&quot;: &quot;AUTO&quot;,
+                &quot;fuzzy_prefix_length&quot;: 2,
+                &quot;fuzzy_max_expansions&quot;: 10,
+                &quot;fuzzy_transpositions&quot;:true
+              }
+            }
+          ]
         }
+      },
+      &quot;_source&quot;: [
+        &quot;title&quot;,
+        &quot;id&quot;,
+        &quot;uid&quot;,
+        &quot;views&quot;
       ]
     }
   }
 }
 </code></pre>
 
-<p>可以看到查询返回的 JSON 里面包含了表示聚合结果的 <code>aggregations</code> 节点，下面有我们的统计结果 <code>age_stats</code>，下面 <code>buckets</code> 表示聚合的具体值 <code>key</code> 和统计数据 <code>doc_count</code>，也就是各个年龄分别有多少个文档，出现了多少次。</p>
+<p>我们测试一下查询结果：<br/>
+<code><br/>
+GET forum-mysql/_search/template<br/>
+{<br/>
+  &quot;id&quot;: &quot;forum_search_template_v1&quot;,<br/>
+  &quot;params&quot;: {<br/>
+    &quot;field&quot;: &quot;title&quot;,<br/>
+    &quot;query&quot;: &quot;elastk stafk 5.2.2&quot;,<br/>
+    &quot;size&quot;: 10<br/>
+  }<br/>
+}<br/>
+</code></p>
 
-<h2 id="toc_3">索引的管理</h2>
+<p>结果方便是：</p>
 
-<p>Elasticsearch 还有很多 API 可以用来对索引进行管理，比如我们还可以通过 <code>_cat</code> API 来查看索引列表:</p>
+<ul>
+<li>Elastic Stack 5.2.2 发布 </li>
+<li>Elastic Stack 5.2.0 发布</li>
+<li>Elastic Stack 5.2.1 发布</li>
+</ul>
 
-<pre><code class="language-js">GET _cat/indices?v
-</code></pre>
+<p>现在，总算是完美的解决了输错字的模糊匹配问题。同时对显示的搜索模板进行更新，我们在社区网站上的搜索框已具有了新的能力了。</p>
 
-<p>返回：</p>
-
-<pre><code class="language-js">health status index   uuid                   pri rep docs.count docs.deleted store.size pri.store.size
-green  open   .kibana 3UiUi8MZQDeF3p97eRWyFw   1   0          2            1      9.7kb          9.7kb
-yellow open   index   VpNv75DzQESBfX8DcLLcww   5   1          1            0      4.3kb          4.3kb
-</code></pre>
-
-<p>返回的结果不是 JSON，而是精简的表格类型，第一行是字段名，后面行是具体的数据，可以看到索引的列表、各索引状态、文档数和索引大小等参数，各字段分别说明如下：</p>
-
-<table>
-<thead>
-<tr>
-<th>字段名</th>
-<th>说明</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td>health</td>
-<td> 索引健康状态，<code>green</code> 表示健康；<code>yellow</code> 表示数据完整，但是缺少副本；<code>red</code> 则表示有数据损坏。</td>
-</tr>
-<tr>
-<td>status</td>
-<td> 索引工作状态，<code>open</code> 表示索引打开中，可以被使用；<code>close</code> 表示索引被关闭，不能使用。</td>
-</tr>
-<tr>
-<td>index</td>
-<td> 索引名称。</td>
-</tr>
-<tr>
-<td>uuid</td>
-<td> 索引的唯一 ID 标识。</td>
-</tr>
-<tr>
-<td>pri</td>
-<td> 索引的主分片个数。</td>
-</tr>
-<tr>
-<td>rep</td>
-<td> 索引的副本分片个数。</td>
-</tr>
-<tr>
-<td>docs.count</td>
-<td> 索引内的文档个数。</td>
-</tr>
-<tr>
-<td>docs.deleted</td>
-<td> 索引内已经删除的文档个数。</td>
-</tr>
-</tbody>
-</table>
-
-<p>如果要删除索引，可以执行下面的动作来清理整个索引，<code>twitter</code> 就是其中要删除的索引名：</p>
-
-<pre><code class="language-js">DELETE twitter
-</code></pre>
-
-<p>集群管理的接口很多，我们这里不展开，我们只需要能够知道查看索引是否存在、索引有多少文档，索引是否正常和能够删除索引，我们就可以继续后面的实战了。</p>
-
-<h2 id="toc_4">集群的监控</h2>
-
-<p>除此之外，我们还可以查看集群的健康状况：</p>
-
-<pre><code class="language-js">GET _cluster/health
-</code></pre>
-
-<p>返回：</p>
-
-<pre><code class="language-js">{
-  &quot;cluster_name&quot;: &quot;elasticsearch&quot;,
-  &quot;status&quot;: &quot;yellow&quot;,
-  &quot;timed_out&quot;: false,
-  &quot;number_of_nodes&quot;: 1,
-  &quot;number_of_data_nodes&quot;: 1,
-  &quot;active_primary_shards&quot;: 14,
-  &quot;active_shards&quot;: 14,
-  &quot;relocating_shards&quot;: 0,
-  &quot;initializing_shards&quot;: 0,
-  &quot;unassigned_shards&quot;: 13,
-  &quot;delayed_unassigned_shards&quot;: 0,
-  &quot;number_of_pending_tasks&quot;: 0,
-  &quot;number_of_in_flight_fetch&quot;: 0,
-  &quot;task_max_waiting_in_queue_millis&quot;: 0,
-  &quot;active_shards_percent_as_number&quot;: 51.85185185185185
-}
-</code></pre>
-
-<p>这里我们只需要关注 <code>status</code> 字段，当值为 <code>green</code> 或者 <code>yellow</code> 时，我们就可以正常使用该 Elasticsearch 服务。</p>
+<p>效果如下：<br/>
+<img src="media/15490984646086/15501432367150.jpg" alt=""/></p>
 
 
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -752,16 +664,13 @@ yellow open   index   VpNv75DzQESBfX8DcLLcww   5   1          1            0    
   <div style="width:50%;float:left;padding-left: 15px;">
 	<div class="text-left" style="padding:15px 0px;">
 		
-	        <a href="2.2_dev_tools.html"  title="Previous Post: 开发调试工具介绍">&laquo; 开发调试工具介绍</a>
+	        <a href="15490320699135.html"  title="Previous Post: 优化查询">&laquo; 优化查询</a>
 	    
 	</div>
   </div>
   <div style="width:50%;float:right;padding-right: 15px;">
 	<div class="text-right" style="padding:15px 0px;">
 		
-	        <a href="3.4_architecture.html" 
-	        title="Next Post: 总体架构">总体架构 &raquo;</a>
-	    
 	</div>
   </div>
 </div>
@@ -795,7 +704,7 @@ s.setAttribute('data-timestamp', +new Date());
 </div>
 <script type="text/javascript">
 	$(function(){
-		var currentURL = '2.3_elasticsearch_basic_api.html';
+		var currentURL = '15490984646086.html';
 		$('#side-nav a').each(function(){
 			if($(this).attr('href') == currentURL){
 				$(this).parent().addClass('active');

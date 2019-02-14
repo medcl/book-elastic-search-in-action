@@ -149,6 +149,10 @@
                 <li class="sub_nav"><a title="优化查询" href="15490320699135.html">优化查询</a></li>
               
           
+              
+                <li class="sub_nav"><a title="模糊查询" href="15490984646086.html">模糊查询</a></li>
+              
+          
 
       
       </ul>
@@ -303,6 +307,12 @@
 
                         
 
+                        
+                          <li><a title="模糊查询" href="15490984646086.html">模糊查询</a></li>
+                                      
+
+                        
+
                     
                   </ul>
                 </nav>
@@ -428,10 +438,10 @@
 <li>spark1.6.3+elasticsearch5.4 netty jar冲突</li>
 </ul>
 
-<p>而关键字 <code>spar</code> 的结果却共有3条，分别是:</p>
+<p>而关键字 <code>spar</code> 的结果却只有2条，分别是:</p>
 
 <ul>
-<li>park elasticsearch 异常： PowerSet: Too many elements to create a power set 40</li>
+<li>spark elasticsearch 异常： PowerSet: Too many elements to create a power set 40</li>
 <li>spark1.6.3+elasticsearch5.4 netty jar冲突</li>
 </ul>
 
@@ -439,7 +449,7 @@
 
 <ul>
 <li><code>spark</code> 名字了5条结果，说明5篇文章的标题匹配了 spark 关键字，但是排第二和第四的文档标题按理要排在靠前的文章，因为他们是 spark 开头的。</li>
-<li><code>spar</code> 作为前缀匹配命中了3条结果，准确率效果不错，但是太严格了，还有一些和 spark 相关的，但是不是开头的文章没有找出来，假如文档都不是 spark 开头，那就会出现找不到，我们可以优先 spark 开头的在前面，不过也应该容忍出现在其他的位置，尤其是 spark 作为开头的位置没有的情况下。</li>
+<li><code>spar</code> 作为前缀匹配命中了2条结果，准确率效果不错，但是太严格了，还有一些和 spark 相关的，但是不是开头的文章没有找出来，假如文档都不是 spark 开头，那就会出现找不到，我们可以优先 spark 开头的在前面，不过也应该容忍出现在其他的位置，尤其是 spark 作为开头的位置没有的情况下。</li>
 </ul>
 
 <p>我们的 bool 查询其实在 should 里面组合了两个子条件，这两个子条件是平等的关系，任意满足即可将命中返回，但是其实我们是希望这些查询有一些偏好倾向的，对应这样的两种问题，我们可以通过设置boost 权重来控制这些子条件命中结果的命中得分来调整最后返回结果的顺序。修改过后的查询如下：</p>
@@ -670,6 +680,9 @@
   <div style="width:50%;float:right;padding-right: 15px;">
 	<div class="text-right" style="padding:15px 0px;">
 		
+	        <a href="15490984646086.html" 
+	        title="Next Post: 模糊查询">模糊查询 &raquo;</a>
+	    
 	</div>
   </div>
 </div>
