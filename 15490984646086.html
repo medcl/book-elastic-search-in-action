@@ -153,6 +153,10 @@
                 <li class="sub_nav"><a title="模糊查询" href="15490984646086.html">模糊查询</a></li>
               
           
+              
+                <li class="sub_nav"><a title="简繁处理" href="15501507055384.html">简繁处理</a></li>
+              
+          
 
       
       </ul>
@@ -309,6 +313,12 @@
 
                         
                           <li><a title="模糊查询" href="15490984646086.html">模糊查询</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="简繁处理" href="15501507055384.html">简繁处理</a></li>
                                       
 
                         
@@ -597,7 +607,7 @@ GET test/_search
 
 <p>奇怪，为什么查不到呢？但是去掉波浪号就能查到！</p>
 
-<p>这是因为加上波浪号，自动转成了 Fuzzy Query，并且波浪号相连的字符串 <code>社区福里</code> 变成了一个整体条件，不会再进行文本分析，如果你的查询条件是英文倒是没问题，但是如果是中文就会有问题，也就是中文字符串会拆分成单个词（Elasitcsearch 默认的分词是 Standard Analyzer，还记得吧），比如这个条件 <code>社区福里</code>，但是注意索引内的数据其实是 <code>社</code>、<code>区</code>、<code>福</code>、<code>利</code>，所以上面的查询就会匹配不上。</p>
+<p>这是因为加上波浪号，自动转成了 Fuzzy Query，并且波浪号相连的字符串 <code>社区福里</code> 变成了一个整体条件，不会再进行文本分析，如果你的查询条件是英文倒是没问题，但是如果是中文就会有问题，也就是中文字符串会拆分成单个词（Elasitcsearch 默认的分词是 Standard Analyzer，还记得吧），比如这个条件 <code>社区福里</code>，但是注意索引内的数据其实是 <code>社</code>、<code>区</code>、<code>福</code>、<code>利</code>，在编辑距离的约束下，这些字符串没有办法相等，所以上面的查询就会出现匹配不上任何结果。</p>
 
 <p>可以发现，中文字符串和英文字符串在 Elasticsearch 里面的很多地方，其表现行为是不一样的，所以我们在自己的业务系统中，一定要反复测试。</p>
 
@@ -728,6 +738,9 @@ GET test/_search
   <div style="width:50%;float:right;padding-right: 15px;">
 	<div class="text-right" style="padding:15px 0px;">
 		
+	        <a href="15501507055384.html" 
+	        title="Next Post: 简繁处理">简繁处理 &raquo;</a>
+	    
 	</div>
   </div>
 </div>
