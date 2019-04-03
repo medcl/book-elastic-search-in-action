@@ -157,6 +157,14 @@
                 <li class="sub_nav"><a title="简繁处理" href="15501507055384.html">简繁处理</a></li>
               
           
+              
+                <li class="sub_nav"><a title="索引别名" href="15510148071240.html">索引别名</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="拼音处理" href="15514465688526.html">拼音处理</a></li>
+              
+          
 
       
       </ul>
@@ -319,6 +327,18 @@
 
                         
                           <li><a title="简繁处理" href="15501507055384.html">简繁处理</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="索引别名" href="15510148071240.html">索引别名</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="拼音处理" href="15514465688526.html">拼音处理</a></li>
                                       
 
                         
@@ -676,7 +696,9 @@
 
 <p><img src="media/15501507055384/15510129499206.jpg" alt=""/></p>
 
-<p>点击执行并创建好这个 Mapping，可以看到右侧返回了执行成功的消息，现在我们的索引就已经构建好了新的 Mapping 了，下一步就是往里面导入数据了。</p>
+<p>另外，我们注意到 在 title 和 message 下面的定义，有一个 fields 的定义，这个是 Elasticsearch 的 multi-fields 的概念，表示可以对一个字段通过在 Mapping 处定义不同的字段处理规则，从而实现多个虚拟子字段，从而满足不同的查询需求，每一个子字段底层都是一个单独的索引，但是在索引的时候只需要提交一个字段的数据就可以了。</p>
+
+<p>我们点击执行并创建好这个 Mapping，可以看到右侧返回了执行成功的消息，现在我们的索引就已经构建好了新的 Mapping 了，下一步就是往里面导入数据了。</p>
 
 <h3 id="toc_13">索引迁移</h3>
 
@@ -733,6 +755,10 @@
 
 <p>这次我们可以看到，我们命中了更多的结果，并且返回的第一条数据，和我们的查询条件关联度非常好，尽管查询条件用的是繁体，而内容却是简体，但是都完美无误的找到了。反过来，如果内容是繁体的，但是很相关，我们就算用简体字的查询条件，现在应该也能找出来了。</p>
 
+<p>最后再回到我们的前台界面，结合本章开头的任务要求，我们尝试搜索 <code>學習</code>， 发现已经准确无误的找到所需的内容。</p>
+
+<p><img src="media/15501507055384/15535013589248.jpg" alt=""/></p>
+
 
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <ins class="adsbygoogle"
@@ -761,6 +787,9 @@
   <div style="width:50%;float:right;padding-right: 15px;">
 	<div class="text-right" style="padding:15px 0px;">
 		
+	        <a href="15510148071240.html" 
+	        title="Next Post: 索引别名">索引别名 &raquo;</a>
+	    
 	</div>
   </div>
 </div>

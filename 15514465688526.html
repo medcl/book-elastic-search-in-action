@@ -1,0 +1,686 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  拼音处理 - Elastic 搜索开发实战
+  
+  </title>
+ <meta name="description" content="Elastic 搜索开发实战，图书">
+ <link href="atom.xml" rel="alternate" title="Elastic 搜索开发实战" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+    <script src="asset/highlightjs/highlight.pack.js"></script>
+    
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: "ca-pub-9516277730901843",
+          enable_page_level_ads: true
+     });
+</script>
+
+    <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+<div id="header">
+    <span style="font-size: 30px;"><a href="index.html">Elastic 搜索开发实战</a></span> <div style="float: right;"><a class="github-button" href="https://github.com/medcl/book-elastic-search-in-action" data-size="large" data-show-count="true" aria-label="Star medcl/book-elastic-search-in-action on GitHub">Star</a></div>
+</div>
+
+</nav>
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Elastic 搜索开发实战</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+      <li><a href="index.html">Home</a></li>
+
+		 
+
+      
+        <li class="divider"></li>             
+          
+              
+                <li><a title="摘要" href="0.1_abstract.html">摘要</a></li> 
+              
+          
+
+      
+        <li class="divider"></li>             
+          
+              
+                <li><a title="前言" href="1.0_preface.html">前言</a></li> 
+              
+          
+              
+                <li class="sub_nav"><a title="谁应该读这本书" href="1.1_who_should_read_this_book.html">谁应该读这本书</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="本书结构" href="1.2_book_strcture.html">本书结构</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="思维导图" href="1.3_mindmap.html">思维导图</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="软件版本" href="1.4_soft_version.html">软件版本</a></li>
+              
+          
+
+      
+        <li class="divider"></li>             
+          
+              
+                <li><a title="基础准备" href="2.0_basic_concept.html">基础准备</a></li> 
+              
+          
+              
+                <li class="sub_nav"><a title="安装使用 Elasticsearch" href="2.1_install_elasticsearch.html">安装使用 Elasticsearch</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="开发调试工具介绍" href="2.2_dev_tools.html">开发调试工具介绍</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="常用 API 介绍" href="2.3_elasticsearch_basic_api.html">常用 API 介绍</a></li>
+              
+          
+
+      
+        <li class="divider"></li>             
+          
+              
+                <li><a title="添加站内搜索功能" href="3.0_site_search.html">添加站内搜索功能</a></li> 
+              
+          
+              
+                <li class="sub_nav"><a title="任务介绍" href="3.1_task_intro.html">任务介绍</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="问题列表" href="3.2_prob_list.html">问题列表</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="功能分解" href="3.3_task_decomposition.html">功能分解</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="总体架构" href="3.4_architecture.html">总体架构</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="数据结构" href="3.5_data_structure.html">数据结构</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="数据迁移" href="3.6_data_migration.html">数据迁移</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="搜索提示" href="3.7_autocomplete.html">搜索提示</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="搜索模板" href="15486660133014.html">搜索模板</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="优化查询" href="15490320699135.html">优化查询</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="模糊查询" href="15490984646086.html">模糊查询</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="简繁处理" href="15501507055384.html">简繁处理</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="索引别名" href="15510148071240.html">索引别名</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="拼音处理" href="15514465688526.html">拼音处理</a></li>
+              
+          
+
+      
+      </ul>
+
+ <div>
+ 	<br/>
+ 	&nbsp;&nbsp; <a class="github-button" href="https://github.com/medcl/book-elastic-search-in-action" data-size="large" data-show-count="true" aria-label="Star medcl/book-elastic-search-in-action on GitHub">Star</a></div>
+
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+        <section id="main-content" role="main" class="scroll-container">
+
+          <div class="row">
+            <div class="large-3 medium-3 columns">
+              <div class="hide-for-small">
+                <div class="sidebar">
+                <nav>
+                  <ul id="side-nav" class="side-nav">
+					 
+
+                    
+                    
+
+                        
+                          <li class="side-title"><span><a title="摘要" href="0.1_abstract.html">摘要</a></span></li>
+                                      
+
+                        
+
+                    
+                    
+
+                        
+                          <li class="side-title"><span><a title="前言" href="1.0_preface.html">前言</a></span></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="谁应该读这本书" href="1.1_who_should_read_this_book.html">谁应该读这本书</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="本书结构" href="1.2_book_strcture.html">本书结构</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="思维导图" href="1.3_mindmap.html">思维导图</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="软件版本" href="1.4_soft_version.html">软件版本</a></li>
+                                      
+
+                        
+
+                    
+                    
+
+                        
+                          <li class="side-title"><span><a title="基础准备" href="2.0_basic_concept.html">基础准备</a></span></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="安装使用 Elasticsearch" href="2.1_install_elasticsearch.html">安装使用 Elasticsearch</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="开发调试工具介绍" href="2.2_dev_tools.html">开发调试工具介绍</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="常用 API 介绍" href="2.3_elasticsearch_basic_api.html">常用 API 介绍</a></li>
+                                      
+
+                        
+
+                    
+                    
+
+                        
+                          <li class="side-title"><span><a title="添加站内搜索功能" href="3.0_site_search.html">添加站内搜索功能</a></span></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="任务介绍" href="3.1_task_intro.html">任务介绍</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="问题列表" href="3.2_prob_list.html">问题列表</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="功能分解" href="3.3_task_decomposition.html">功能分解</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="总体架构" href="3.4_architecture.html">总体架构</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="数据结构" href="3.5_data_structure.html">数据结构</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="数据迁移" href="3.6_data_migration.html">数据迁移</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="搜索提示" href="3.7_autocomplete.html">搜索提示</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="搜索模板" href="15486660133014.html">搜索模板</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="优化查询" href="15490320699135.html">优化查询</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="模糊查询" href="15490984646086.html">模糊查询</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="简繁处理" href="15501507055384.html">简繁处理</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="索引别名" href="15510148071240.html">索引别名</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="拼音处理" href="15514465688526.html">拼音处理</a></li>
+                                      
+
+                        
+
+                    
+                  </ul>
+                </nav>
+                </div>
+              </div>
+            </div>
+            <div class="large-9 medium-9 columns">
+
+ <!-- start toc -->
+<div style="background: #fbf7f7; margin-top: 35px;padding: 10px;">
+  <link rel="stylesheet" href="asset/css/zTreeStyle/zTreeStyle.css" type="text/css">
+        <ul id="tree" class="ztree"></ul>
+</div>   
+<!-- end toc -->
+
+<div class="markdown-body">
+<h1>拼音处理</h1>
+
+<p>到目前为止，我们已经处理了查询，也处理了简繁体，接下来我们来看看如何处理拼音的需求。</p>
+
+<p>拼音又叫汉语拼音（Hànyǔ Pīnyīn；英语：Chinese Pinyin、Hanyu Pinyin或Chinese Phonetic Alphabets）简称拼音（Pinyin），是中华人民共和国的汉字注音拉丁化方案，于1955年—1957年文字改革时被原中国文字改革委员会（现国家语言文字工作委员会）汉语拼音方案委员会研究制定。该拼音方案主要用于汉语普通话读音的标注，作为汉字的一种普通话音标。2012年10月1日，新汉语拼音正词法规则正式实施。</p>
+
+<p>我们天生就是爱偷懒的，那个方便就用那个，比如输入法，早期的输入法非常难用，不管是全拼还是五笔都需要输入敲很多键才能得到我们需要的文本，五笔相对来说更加准确但是需要背字根，不过随着拼音教育的普及，以及拼音输入法的更加智能，拼音输入法后来居上，慢慢变成了主流输入法，我相信现在的年轻人应该很少会用五笔输入法了吧。</p>
+
+<p>在一个搜索框里面，用户常常可能会因为打错字而输入成拼音字符或者只是会为了方便而输入拼音首字母缩写，因为这样打字最快，如果你也能够很好的支持这样的查询，那将会给用户带来意外的惊喜体验。</p>
+
+<h2 id="toc_0">插件介绍</h2>
+
+<p>尽管 Elasticsearch 本身不提供拼音的处理，但是它的扩展性非常好，我们通过安装相应的插件即可扩展我们需要的功能，对应拼音的处理，我们完全可以在创建索引的时候，将中文转换成拼音存进索引，另外在查询的时候，也可以将中文转换成拼音进行索引的匹配。这里我给大家介绍一个我写好的一个拼音处理的插件，项目地址：<a href="https://github.com/medcl/elasticsearch-analysis-pinyin%E3%80%82">https://github.com/medcl/elasticsearch-analysis-pinyin。</a></p>
+
+<p>这个插件提供了3种不同类型的组件：</p>
+
+<ul>
+<li>一个名为 <code>pinyin</code> 的文本分析器</li>
+<li>一个名为 <code>pinyin</code> 的 Tokenizer</li>
+<li>一个名为 <code>pinyin</code> 的 TokenFilter</li>
+</ul>
+
+<p>并提供了一系列参数来支持自定义分词行为，主要的参数及详细说明如下：</p>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>keep_first_letter</td>
+<td>true</td>
+<td>将汉字转换成拼音并只保留各自的首字母，如：<code>刘德华</code> -&gt; <code>ldh</code></td>
+</tr>
+<tr>
+<td>keep_separate_first_letter</td>
+<td>false</td>
+<td>将汉字转换成拼音并只保留各自的首字母，且将首字母独立分开，如：<code>刘德华</code> -&gt; [<code>l</code>,<code>d</code>,<code>h</code>]</td>
+</tr>
+<tr>
+<td>keep_full_pinyin</td>
+<td>true</td>
+<td>将汉字转换成拼音，并保留全拼，每个拼音独立分开，如：<code>刘德华</code> -&gt; [<code>liu</code>,<code>de</code>,<code>hua</code>]</td>
+</tr>
+<tr>
+<td>none_chinese_pinyin_tokenize</td>
+<td>true</td>
+<td>将不是汉字的拼音字母进行分词，用于对拼音输入进行分词，如：<code>liudehua</code> -&gt; [<code>liu</code>,<code>de</code>,<code>hua</code>]</td>
+</tr>
+<tr>
+<td>ignore_pinyin_offset</td>
+<td>true</td>
+<td>是否忽略 offset 的位置处理，对于一个汉字转，如果存在多个转换形式，则会存在位置交叠，而在 6.0 以后，这种 offset 交叉是不允许的</td>
+</tr>
+</tbody>
+</table>
+
+<p>这个拼音插件默认行为是同时保留拼音首字母和全拼，以一个例子说明如下：</p>
+
+<pre><code>GET /_analyze
+{
+  &quot;text&quot;: [&quot;学习&quot;],
+  &quot;analyzer&quot;: &quot;pinyin&quot;
+}
+</code></pre>
+
+<p>输出为：</p>
+
+<pre><code>{
+  &quot;tokens&quot; : [
+    {
+      &quot;token&quot; : &quot;xue&quot;,
+      &quot;start_offset&quot; : 0,
+      &quot;end_offset&quot; : 0,
+      &quot;type&quot; : &quot;word&quot;,
+      &quot;position&quot; : 0
+    },
+    {
+      &quot;token&quot; : &quot;xi&quot;,
+      &quot;start_offset&quot; : 0,
+      &quot;end_offset&quot; : 0,
+      &quot;type&quot; : &quot;word&quot;,
+      &quot;position&quot; : 1
+    },
+    {
+      &quot;token&quot; : &quot;xx&quot;,
+      &quot;start_offset&quot; : 0,
+      &quot;end_offset&quot; : 0,
+      &quot;type&quot; : &quot;word&quot;,
+      &quot;position&quot; : 1
+    }
+  ]
+}
+</code></pre>
+
+<p>从上面的输出可以看到，这个结果对于我们用来做智能提示已经足够了，尽管每个 term 的 offset 虽然都是 0，一般高亮会用到 offset，但是我们这里不需要使用 offset，因为我们的高亮都是在浏览器端的 Typeahead 来处理的，所以默认的行为已经满足我们的需求了。</p>
+
+<p>同时，我们也看到产生了一个 <code>xx</code> 的首字母缩写的 term，为了提高召回率，我们还可以尝试开启一下参数 <code>keep_separate_first_letter</code>，这样单独的首字母也会作为索引，容错性更高，所以我们还需要进行一下自定义，我们自定义一个名为 <code>my_pinyin</code> 的 Tokenizer，开启拼音的转换属性，然后再自定义一个名为的 <code>pinyin_analyzer</code> 的 Analyzer，使用刚刚自定义的 Tokenizer。</p>
+
+<h2 id="toc_1">功能集成</h2>
+
+<p>因为我们的索引 <code>forum-mysql-v1</code> 已经存在，并且已经有了数据，我们不能直接进行索引下面的 Analyzer setting 的修改，我们可以先关闭索引，然后修改设置完了之后再开启索引。完整的自定义的脚本如下：</p>
+
+<pre><code>POST  forum-mysql-v1/_close
+
+PUT forum-mysql-v1/_settings
+{
+  &quot;index&quot;: {
+    &quot;analysis&quot;: {
+      &quot;analyzer&quot;: {
+        &quot;pinyin_analyzer&quot;: {
+          &quot;tokenizer&quot;: &quot;my_pinyin&quot;
+        }
+      },
+      &quot;tokenizer&quot;: {
+        &quot;my_pinyin&quot;: {
+          &quot;type&quot;: &quot;pinyin&quot;,
+          &quot;keep_first_letter&quot;: true,
+          &quot;keep_separate_first_letter&quot;: true,
+          &quot;keep_full_pinyin&quot;: true,
+          &quot;keep_original&quot;: false,
+          &quot;limit_first_letter_length&quot;: 16,
+          &quot;lowercase&quot;: true
+        }
+      }
+    }
+  }
+}
+
+POST  forum-mysql-v1/_open
+</code></pre>
+
+<p>还记得前面介绍过的 multi-field 数据结构么？这里要集成拼音的处理，我们还需要修改数据的 Mapping，我们添加一个新的子字段，我们添加一个 <code>pinyin</code> 字段，并设置Analyzer 为 <code>pinyin_analyzer</code>，具体修改如下：</p>
+
+<p><img src="media/15514465688526/15543033360539.jpg" alt=""/></p>
+
+<p>可以看到，我们在现有的索引基础上新增了一个子字段，但是能不能修改已有字段的 Analyzer 呢，因为 Analyzer 的设置涉及到底层的数据结构，所以不是所有的 Mapping 信息都是可以动态修改的。</p>
+
+<h3 id="toc_2">小知识</h3>
+
+<p>我们可以对现有索引的 Mapping 新增字段并指定新的 Analyzer，但是不能修改已有字段的 Analyzer。</p>
+
+<p>我们对于一个已经存在的索引添加子字段是不会影响现有的数据的，所以尽管我们添加好了 <code>title.pinyin</code> 这个字段，但是我们现在还不能使用他，不过没有关系，我们原地进行一次重建就好了，也就是将当前索引的数据重新替换一下当前索引，一般用于 Mapping 的修改，我们可以很方便的使用 <code>update_by_query</code> 接口来实现，如下：</p>
+
+<p><img src="media/15514465688526/15540474513250.jpg" alt=""/></p>
+
+<p>当然，我们也可以使用前面介绍的 <code>reindex</code> 接口来实现，不过 reindex 接口不支持来源和目的指定相同的索引，我们用 update 接口更加方便。使用 update 接口的时候，还可以添加过滤条件来选择要更新的数据范围，同时还能借助脚本来进行文档的修改，这里暂时不介绍。</p>
+
+<p>我们现在就可以实时拼音查询了，试着搜索 <code>xuexi</code>，如下：<br/>
+<img src="media/15514465688526/15540477178467.jpg" alt=""/></p>
+
+<p>可以看到，可以正确找到跟 <code>学习</code> 相关的文档了。</p>
+
+<h3 id="toc_3">更新查询模板</h3>
+
+<p>为了方便切换，我们创建一个新的查询模板 <code>forum_search_template_v2</code>，以和之前的搜索行为进行区分，并添加一个子查询，使用拼音字段，如下：<br/>
+<img src="media/15514465688526/15540487710969.jpg" alt=""/></p>
+
+<p>我们用新的查询模板来执行一下查询，如下：<br/>
+<img src="media/15514465688526/15540486490431.jpg" alt=""/></p>
+
+<p>因为我们修改了模板名，我们的 PHP 代码也需要进行调整，如下:<br/>
+<img src="media/15514465688526/15543040803806.jpg" alt=""/><br/>
+当然这一块模板名称的设置我们完全也可以做出后台可以动态调整的参数。</p>
+
+<p>是时候检验工作成果的时候，我们切换到网站前台，到搜索框里面验证一下我们的改进成果，如下图：<br/>
+<img src="media/15514465688526/pinyin%20test.gif" alt="pinyin test"/></p>
+
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-9516277730901843"
+     data-ad-slot="5015120160"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+</div>
+
+<br /><br />
+<hr />
+
+<div class="row clearfix">
+  <div style="width:50%;float:left;padding-left: 15px;">
+	<div class="text-left" style="padding:15px 0px;">
+		
+	        <a href="15510148071240.html"  title="Previous Post: 索引别名">&laquo; 索引别名</a>
+	    
+	</div>
+  </div>
+  <div style="width:50%;float:right;padding-right: 15px;">
+	<div class="text-right" style="padding:15px 0px;">
+		
+	</div>
+  </div>
+</div>
+
+<div class="row">
+<div style="padding:0px 0.93em;" class="share-comments">
+<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://elastic-sou-suo-kai-fa-shi-zhan.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                            
+
+</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		var currentURL = '15514465688526.html';
+		$('#side-nav a').each(function(){
+			if($(this).attr('href') == currentURL){
+				$(this).parent().addClass('active');
+			}
+		});
+	});
+</script>
+
+<!-- toc -->
+<script src="asset/js/jquery.ztree.all-3.5.min.js?v=4?v=20151125" type="text/javascript"></script>
+<script src="asset/js/ztree_toc.js?v=4?v=20151125" type="text/javascript"></script>
+<SCRIPT type="text/javascript" >
+  <!--
+  $(document).ready(function(){
+    $('#tree').ztree_toc({
+      is_auto_number:true
+    });
+  });
+  //-->
+  </SCRIPT>
+  <!-- toc -->
+
+  
+</div></div>
+
+
+<div class="page-bottom">
+  <div class="row">
+  <hr />
+  <div class="small-9 columns">
+  <p class="copyright">Copyright &copy; 2018 <a target="_blank" href="http://medcl.com">Medcl</a>. 未经许可,谢绝转载.</p>
+  </div>
+  <div class="small-3 columns">
+  <p class="copyright text-right"><a href="#header">TOP</a></p>
+  </div>
+   
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+    
+    
+    <script src="asset/js/foundation.min.js"></script>
+    <script src="asset/js/foundation/foundation.offcanvas.js"></script>
+
+<!-- UserVoice JavaScript SDK (only needed once on a page) -->
+<script>(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='http://widget.uservoice.com/c1PjjxGIoKy3HUGvYKodbA.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})()</script>
+
+<!-- A tab to launch the Classic Widget -->
+<script>
+UserVoice = window.UserVoice || [];
+UserVoice.push(['showTab', 'classic_widget', {
+  mode: 'feedback',
+  primary_color: '#fa8c28',
+  link_color: '#0a8cc6',
+  forum_id: 53824,
+  support_tab_name: '联系我',
+  feedback_tab_name: '给予反馈',
+  tab_label: '意见反馈',
+  tab_color: '#2369d9',
+  tab_position: 'middle-right',
+  tab_inverted: false
+}]);
+</script>
+
+
+    <script>
+      $(document).foundation();
+
+     
+    </script>
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script id="dsq-count-scr" src="//elastic-sou-suo-kai-fa-shi-zhan.disqus.com/count.js" async></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-120597990-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-120597990-1');
+    </script>
+  </body>
+</html>

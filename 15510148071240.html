@@ -1,0 +1,560 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  索引别名 - Elastic 搜索开发实战
+  
+  </title>
+ <meta name="description" content="Elastic 搜索开发实战，图书">
+ <link href="atom.xml" rel="alternate" title="Elastic 搜索开发实战" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+    <script src="asset/highlightjs/highlight.pack.js"></script>
+    
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: "ca-pub-9516277730901843",
+          enable_page_level_ads: true
+     });
+</script>
+
+    <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+<div id="header">
+    <span style="font-size: 30px;"><a href="index.html">Elastic 搜索开发实战</a></span> <div style="float: right;"><a class="github-button" href="https://github.com/medcl/book-elastic-search-in-action" data-size="large" data-show-count="true" aria-label="Star medcl/book-elastic-search-in-action on GitHub">Star</a></div>
+</div>
+
+</nav>
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Elastic 搜索开发实战</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+      <li><a href="index.html">Home</a></li>
+
+		 
+
+      
+        <li class="divider"></li>             
+          
+              
+                <li><a title="摘要" href="0.1_abstract.html">摘要</a></li> 
+              
+          
+
+      
+        <li class="divider"></li>             
+          
+              
+                <li><a title="前言" href="1.0_preface.html">前言</a></li> 
+              
+          
+              
+                <li class="sub_nav"><a title="谁应该读这本书" href="1.1_who_should_read_this_book.html">谁应该读这本书</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="本书结构" href="1.2_book_strcture.html">本书结构</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="思维导图" href="1.3_mindmap.html">思维导图</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="软件版本" href="1.4_soft_version.html">软件版本</a></li>
+              
+          
+
+      
+        <li class="divider"></li>             
+          
+              
+                <li><a title="基础准备" href="2.0_basic_concept.html">基础准备</a></li> 
+              
+          
+              
+                <li class="sub_nav"><a title="安装使用 Elasticsearch" href="2.1_install_elasticsearch.html">安装使用 Elasticsearch</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="开发调试工具介绍" href="2.2_dev_tools.html">开发调试工具介绍</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="常用 API 介绍" href="2.3_elasticsearch_basic_api.html">常用 API 介绍</a></li>
+              
+          
+
+      
+        <li class="divider"></li>             
+          
+              
+                <li><a title="添加站内搜索功能" href="3.0_site_search.html">添加站内搜索功能</a></li> 
+              
+          
+              
+                <li class="sub_nav"><a title="任务介绍" href="3.1_task_intro.html">任务介绍</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="问题列表" href="3.2_prob_list.html">问题列表</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="功能分解" href="3.3_task_decomposition.html">功能分解</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="总体架构" href="3.4_architecture.html">总体架构</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="数据结构" href="3.5_data_structure.html">数据结构</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="数据迁移" href="3.6_data_migration.html">数据迁移</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="搜索提示" href="3.7_autocomplete.html">搜索提示</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="搜索模板" href="15486660133014.html">搜索模板</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="优化查询" href="15490320699135.html">优化查询</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="模糊查询" href="15490984646086.html">模糊查询</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="简繁处理" href="15501507055384.html">简繁处理</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="索引别名" href="15510148071240.html">索引别名</a></li>
+              
+          
+              
+                <li class="sub_nav"><a title="拼音处理" href="15514465688526.html">拼音处理</a></li>
+              
+          
+
+      
+      </ul>
+
+ <div>
+ 	<br/>
+ 	&nbsp;&nbsp; <a class="github-button" href="https://github.com/medcl/book-elastic-search-in-action" data-size="large" data-show-count="true" aria-label="Star medcl/book-elastic-search-in-action on GitHub">Star</a></div>
+
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+        <section id="main-content" role="main" class="scroll-container">
+
+          <div class="row">
+            <div class="large-3 medium-3 columns">
+              <div class="hide-for-small">
+                <div class="sidebar">
+                <nav>
+                  <ul id="side-nav" class="side-nav">
+					 
+
+                    
+                    
+
+                        
+                          <li class="side-title"><span><a title="摘要" href="0.1_abstract.html">摘要</a></span></li>
+                                      
+
+                        
+
+                    
+                    
+
+                        
+                          <li class="side-title"><span><a title="前言" href="1.0_preface.html">前言</a></span></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="谁应该读这本书" href="1.1_who_should_read_this_book.html">谁应该读这本书</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="本书结构" href="1.2_book_strcture.html">本书结构</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="思维导图" href="1.3_mindmap.html">思维导图</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="软件版本" href="1.4_soft_version.html">软件版本</a></li>
+                                      
+
+                        
+
+                    
+                    
+
+                        
+                          <li class="side-title"><span><a title="基础准备" href="2.0_basic_concept.html">基础准备</a></span></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="安装使用 Elasticsearch" href="2.1_install_elasticsearch.html">安装使用 Elasticsearch</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="开发调试工具介绍" href="2.2_dev_tools.html">开发调试工具介绍</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="常用 API 介绍" href="2.3_elasticsearch_basic_api.html">常用 API 介绍</a></li>
+                                      
+
+                        
+
+                    
+                    
+
+                        
+                          <li class="side-title"><span><a title="添加站内搜索功能" href="3.0_site_search.html">添加站内搜索功能</a></span></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="任务介绍" href="3.1_task_intro.html">任务介绍</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="问题列表" href="3.2_prob_list.html">问题列表</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="功能分解" href="3.3_task_decomposition.html">功能分解</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="总体架构" href="3.4_architecture.html">总体架构</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="数据结构" href="3.5_data_structure.html">数据结构</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="数据迁移" href="3.6_data_migration.html">数据迁移</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="搜索提示" href="3.7_autocomplete.html">搜索提示</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="搜索模板" href="15486660133014.html">搜索模板</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="优化查询" href="15490320699135.html">优化查询</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="模糊查询" href="15490984646086.html">模糊查询</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="简繁处理" href="15501507055384.html">简繁处理</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="索引别名" href="15510148071240.html">索引别名</a></li>
+                                      
+
+                        
+
+                        
+                          <li><a title="拼音处理" href="15514465688526.html">拼音处理</a></li>
+                                      
+
+                        
+
+                    
+                  </ul>
+                </nav>
+                </div>
+              </div>
+            </div>
+            <div class="large-9 medium-9 columns">
+
+ <!-- start toc -->
+<div style="background: #fbf7f7; margin-top: 35px;padding: 10px;">
+  <link rel="stylesheet" href="asset/css/zTreeStyle/zTreeStyle.css" type="text/css">
+        <ul id="tree" class="ztree"></ul>
+</div>   
+<!-- end toc -->
+
+<div class="markdown-body">
+<h1>索引别名</h1>
+
+<h2 id="toc_0">索引别名的使用</h2>
+
+<p>好了，到目前看起来都很完美，除了有一点点问题，就是如果每次修改索引都要改配置或程序里面的索引名，甚至意味着需要重新部署。那还有没有办法变的更完美一点点呢？</p>
+
+<p>在 Elasticsearch 里面有个 alias 别名的功能，可以动态的修改别名指向的实际索引，这个功能刚好可以实现我们索引的动态修改，具体的使用方法如下：</p>
+
+<pre><code>POST /_aliases
+{
+    &quot;actions&quot; : [
+        { &quot;add&quot; : { &quot;index&quot; : &quot;forum-mysql-v1&quot;, &quot;alias&quot; : &quot;forum-mysql&quot; } }
+    ]
+}
+</code></pre>
+
+<p>这里参数里面的 add，表示添加一个别名的操作，里面有两个参数，index 表示对具体的那个索引进行别名的操作，alias 也就是添加一个什么样的别名。</p>
+
+<p>与 add 对应的还有一个删除别名的操作，用于删除索引的别名，假如有一天，我们重新修改了索引，我们需要将别名切换到一个新的索引里面去（如 forum-mysql-v2），则可以进行如下的操作：</p>
+
+<pre><code>POST /_aliases
+{
+    &quot;actions&quot; : [
+        { &quot;add&quot; : { &quot;index&quot; : &quot;forum-mysql-v2&quot;, &quot;alias&quot; : &quot;forum-mysql&quot; } },
+         { &quot;remove&quot; : { &quot;index&quot; : &quot;forum-mysql-v1&quot;, &quot;alias&quot; : &quot;forum-mysql&quot; } }
+    ]
+}
+</code></pre>
+
+<p>通过别名，我们实现了虚拟的索引名，我们然后进一步修改我们的查询也指向我们的别名，而不是实际的索引，如下：</p>
+
+<p><img src="media/15510148071240/15534997344293.jpg" alt=""/></p>
+
+<p>现在，打开浏览器执行一下测试，智能提示应该能够很好的一切照旧。</p>
+
+<h3 id="toc_1">小知识</h3>
+
+<ul>
+<li>一个别名可以对应多个实际的索引</li>
+<li>一个索引可以指定多个不同的别名</li>
+<li>如果一个别名指定多索引，则不能进行索引数据的修改，单一对应关系则不影响</li>
+<li>创建索引别名的时候，可以指定过滤条件来进行数据的过滤，相当于创建 <code>视图</code></li>
+</ul>
+
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-9516277730901843"
+     data-ad-slot="5015120160"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+</div>
+
+<br /><br />
+<hr />
+
+<div class="row clearfix">
+  <div style="width:50%;float:left;padding-left: 15px;">
+	<div class="text-left" style="padding:15px 0px;">
+		
+	        <a href="15501507055384.html"  title="Previous Post: 简繁处理">&laquo; 简繁处理</a>
+	    
+	</div>
+  </div>
+  <div style="width:50%;float:right;padding-right: 15px;">
+	<div class="text-right" style="padding:15px 0px;">
+		
+	        <a href="15514465688526.html" 
+	        title="Next Post: 拼音处理">拼音处理 &raquo;</a>
+	    
+	</div>
+  </div>
+</div>
+
+<div class="row">
+<div style="padding:0px 0.93em;" class="share-comments">
+<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://elastic-sou-suo-kai-fa-shi-zhan.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                            
+
+</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		var currentURL = '15510148071240.html';
+		$('#side-nav a').each(function(){
+			if($(this).attr('href') == currentURL){
+				$(this).parent().addClass('active');
+			}
+		});
+	});
+</script>
+
+<!-- toc -->
+<script src="asset/js/jquery.ztree.all-3.5.min.js?v=4?v=20151125" type="text/javascript"></script>
+<script src="asset/js/ztree_toc.js?v=4?v=20151125" type="text/javascript"></script>
+<SCRIPT type="text/javascript" >
+  <!--
+  $(document).ready(function(){
+    $('#tree').ztree_toc({
+      is_auto_number:true
+    });
+  });
+  //-->
+  </SCRIPT>
+  <!-- toc -->
+
+  
+</div></div>
+
+
+<div class="page-bottom">
+  <div class="row">
+  <hr />
+  <div class="small-9 columns">
+  <p class="copyright">Copyright &copy; 2018 <a target="_blank" href="http://medcl.com">Medcl</a>. 未经许可,谢绝转载.</p>
+  </div>
+  <div class="small-3 columns">
+  <p class="copyright text-right"><a href="#header">TOP</a></p>
+  </div>
+   
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+    
+    
+    <script src="asset/js/foundation.min.js"></script>
+    <script src="asset/js/foundation/foundation.offcanvas.js"></script>
+
+<!-- UserVoice JavaScript SDK (only needed once on a page) -->
+<script>(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='http://widget.uservoice.com/c1PjjxGIoKy3HUGvYKodbA.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})()</script>
+
+<!-- A tab to launch the Classic Widget -->
+<script>
+UserVoice = window.UserVoice || [];
+UserVoice.push(['showTab', 'classic_widget', {
+  mode: 'feedback',
+  primary_color: '#fa8c28',
+  link_color: '#0a8cc6',
+  forum_id: 53824,
+  support_tab_name: '联系我',
+  feedback_tab_name: '给予反馈',
+  tab_label: '意见反馈',
+  tab_color: '#2369d9',
+  tab_position: 'middle-right',
+  tab_inverted: false
+}]);
+</script>
+
+
+    <script>
+      $(document).foundation();
+
+     
+    </script>
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script id="dsq-count-scr" src="//elastic-sou-suo-kai-fa-shi-zhan.disqus.com/count.js" async></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-120597990-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-120597990-1');
+    </script>
+  </body>
+</html>
