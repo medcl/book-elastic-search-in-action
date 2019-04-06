@@ -63,7 +63,7 @@ Automatically published and hosted thanks to [Netlify](https://www.netlify.com/)
 ## 版权声明
 > 本书所有内容归 Medcl 版权所有，
 
-> 本书可免费在线阅读，
+> 本书可免费在线阅读、链接分享，
 
 > 未经授权，禁止任何形式的转载复制，
 
