@@ -1,5 +1,5 @@
 ---
-title: 添加站内搜索功能
+title: 站内搜索
 weight: 3
 pre: "<b>3. </b>"
 chapter: true
@@ -15,8 +15,4 @@ draft: false
 
 我们来看一下本章的大纲：
 
-* 任务介绍
-* 需求分析
-* 开发环境
-* 原型设计
-* 功能实现
+{{% children depth="3" showhidden="false" %}}
