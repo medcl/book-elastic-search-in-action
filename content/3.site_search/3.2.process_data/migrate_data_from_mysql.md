@@ -98,4 +98,4 @@ output {
 ```
 都有可能是 Elasticsearch 服务器不可用造成的。
 
-最后，我把测试数据都导出放在本书配套的资源了： `3.6_data_migration/forum-mysql-dump.json` ，大家可以自行导入到本地的 Elasticsearch，执行相同的查询测试了。
+最后，我把测试数据都导出放在本书配套的资源了： [3.6_data_migration/forum-mysql-dump.json](https://github.com/medcl/book-elastic-search-in-action-resources/tree/master/3.6_data_migration) ，大家可以自行导入到本地的 Elasticsearch，执行相同的查询测试了。
