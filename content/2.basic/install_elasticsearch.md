@@ -104,7 +104,7 @@ curl -XPOST -H 'Content-Type: application/json'   http://localhost:9200/index/do
 刚刚我们提交了一个索引数据，我们怎么验证是否真的写成功了呢？我们可以拿回来看一下，也就是取回我们刚刚添加的这个索引文档，我们只需要把刚刚的 HTTP 请求里面的 POST 谓词换成 GET 就可以了。
 
 ```js
-curl -XGET -H 'Content-Type: application/json'   http://localhost:9200/index/doc/1?pretty'
+curl -XGET -H 'Content-Type: application/json'   http://localhost:9200/index/doc/1?pretty
 ```
 
 ![](/media/15276055616634/15278357728665.jpg)
