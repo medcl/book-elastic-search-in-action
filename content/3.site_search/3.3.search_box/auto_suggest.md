@@ -796,7 +796,7 @@ var topSearch = new Bloodhound({
 ![](/media/15308021492726/15487762615017.jpg)
 
 怎么样，是不是看上去漂亮很多啊。一个搜索框的自动提示功能就完成了。
-相关代码位置：`/3.7_autocomplete/final/`
+相关代码位置：[/3.7_autocomplete/final/](https://github.com/medcl/book-elastic-search-in-action-resources/tree/master/3.7_autocomplete/final)
 
 
 ## 小知识
