@@ -173,7 +173,7 @@ GET /_analyze
   "tokenizer" : "standard",
   "filter" : ["lowercase"],
   "char_filter" : ["stconvert"],
-  "text" : "我愛China。"
+  "text" : "我爱China。"
 }
 ```
 
