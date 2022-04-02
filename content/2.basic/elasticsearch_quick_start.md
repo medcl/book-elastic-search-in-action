@@ -15,7 +15,7 @@ draft: false
 假设我们创建一个有包含 2 个字段的索引文档。
 
 ```js
-POST twitter/doc/1
+POST twitter/_doc/1
 {
   "name":"jack",
   "age":30
@@ -44,7 +44,7 @@ POST twitter/doc/1
 如果要取回这个文档，只需要将 POST 换成 GET，如下：
 
 ```js
-GET twitter/doc/1
+GET twitter/_doc/1
 ```
 
 返回结果为：
@@ -68,7 +68,7 @@ GET twitter/doc/1
 如果要修改这个文档，有两种方式，一种是完全替换，使用相同的路径即可，我们修改 age 为 35，如下：
 
 ```js
-PUT twitter/doc/1
+PUT twitter/_doc/1
 {
   "name":"jack",
   "age":35
@@ -97,7 +97,7 @@ PUT twitter/doc/1
 还一种更新叫做部分更新，你只需指定要更新的字段和该字段的值即可，不用准备完整的 JSON 文档，如下：
 
 ```js
-POST twitter/doc/1/_update
+POST twitter/_update/1
 {
     "doc" : {
         "name" : "mark"
@@ -110,7 +110,7 @@ POST twitter/doc/1/_update
 最后我们再来看看删除，只需要把取回文档操作的 GET 换成 DELETE 就行了，如下：
 
 ```js
-DELETE twitter/doc/1
+DELETE twitter/_doc/1
 ```
 
 返回：
@@ -140,13 +140,13 @@ DELETE twitter/doc/1
 我们创建两个索引文档，ID 分别是 1 和 2，如下：
 
 ```js
-POST twitter/doc/1
+POST twitter/_doc/1
 {
   "name":"jack",
   "age":30
 }
 
-POST twitter/doc/2
+POST twitter/_doc/2
 {
   "name":"mark",
   "age":35
@@ -256,12 +256,12 @@ GET twitter/_search
 我们再创建两个索引文档，如下：
 
 ```js
-POST twitter/doc/3
+POST twitter/_doc/3
 {
   "name":"john",
   "age":30
 }
-POST twitter/doc/4
+POST twitter/_doc/4
 {
   "name":"mark",
   "age":40
